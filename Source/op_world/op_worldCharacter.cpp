@@ -12,6 +12,7 @@
 #include "Engine/Engine.h" // Include this for UE_LOG
 #include "DrawDebugHelpers.h" // Include this for debug drawing
 #include "NavigationSystem.h" // Include NavigationSystem for navigation functionality
+#include "Kismet/GameplayStatics.h" // Include the header for UGameplayStatics
 
 //////////////////////////////////////////////////////////////////////////
 // Aop_worldCharacter
@@ -189,15 +190,23 @@ void Aop_worldCharacter::PerformLineTrace()
 		AActor* HitActor = HitResult.GetActor();
 		if (HitActor)
 		{
-			// Handle the hit actor here
-			// For example, apply damage, show a hit effect, etc.
+		//--
+		 // Get the player controller
+		 APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		 if (PlayerController)
+		 {
+			 // Set the player's location to the hit location
+			 PlayerController->GetPawn()->SetActorLocation(HitResult.Location);
+
+		 }
+		 // --
 		}
 	}
 
 	// For debugging purposes, draw a line in the editor to visualize the line trace
 	if (GetWorld() && bHit)
 	{
-		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1, 0, 1);
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 5, 0, 1);
 	}
 }
 
@@ -231,28 +240,49 @@ if (bHit)
 {
     // Handle what happens when we hit something (e.g., apply damage to the hit actor)
     AActor* HitActor = HitResult.GetActor();
-    if (HitActor)
+     if (HitActor)
     {
+
+		 //--
+		  // Get the player controller
+		 APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		 if (PlayerController)
+		 {
+			 // Set the player's location to the hit location
+			 PlayerController->GetPawn()->SetActorLocation(HitResult.Location);
+
+		 }
+		 // --
         // Get the controller
-        AController* MyController = GetController();
-        if (MyController)
-        {
-            UNavigationSystemBase* NavSystemBase = GetWorld()->GetNavigationSystem();
-            if (NavSystemBase)
-            {
-                // Cast to the correct navigation system type
-                UNavigationSystemV1* NavSystem = Cast<UNavigationSystemV1>(NavSystemBase);
-                if (NavSystem)
-                {
-                    // Check if the hit location is reachable
-                    FNavLocation TargetLocation;
-                    if (NavSystem->GetRandomPointInNavigableRadius(HitResult.Location, TraceDistance, TargetLocation))
-                    {
-                       // MyController->MoveToLocation(TargetLocation.Location);
-                    }
-                }
-            }
-        }
+   //     AController* MyController = GetController();
+   //     if (MyController)
+   //     {
+			//// Get the player controller
+			//APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+			//if (PlayerController)
+			//{
+			//	// Set the player's location to the hit location
+			//	PlayerController->GetPawn()->SetActorLocation(HitResult.Location);
+			//}
+
+   //         //UNavigationSystemBase* NavSystemBase = GetWorld()->GetNavigationSystem();
+   //         //if (NavSystemBase)
+   //         //{
+   //         //    // Cast to the correct navigation system type
+   //         //    UNavigationSystemV1* NavSystem = Cast<UNavigationSystemV1>(NavSystemBase);
+   //         //    if (NavSystem)
+   //         //    {
+   //         //        // Check if the hit location is reachable
+   //         //        FNavLocation TargetLocation;
+   //         //        if (NavSystem->GetRandomPointInNavigableRadius(HitResult.Location, TraceDistance, TargetLocation))
+   //         //        {
+   //         //           // MyController->MoveToLocation(TargetLocation.Location);
+   //         //        }
+   //         //    }
+           // }
+
+
+       // }
     }
 }
 
@@ -261,9 +291,9 @@ if (bHit)
 	// For debugging purposes, draw a line in the editor to visualize the line trace
 	if (GetWorld() && bHit)
 	{
-		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1, 0, 1);
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 5, 0, 1);
 	}
-}*/
-
+}
+*/
 
 
