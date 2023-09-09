@@ -37,6 +37,10 @@ class Aop_worldCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	/** fire Action */
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	//class UInputAction* FireAction;
+
 public:
 	Aop_worldCharacter();
 	
@@ -48,8 +52,11 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
 
+	//void Fire(const FInputActionValue& Value);
+	/** Called for looking input */
+	void Fire();
+	
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -62,5 +69,14 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+private:
+	// Function to perform line trace for shooting
+	void PerformLineTrace();
+
+	// Variables for line trace
+	FVector TraceStart;
+	FVector TraceEnd;
+	float TraceDistance;
 };
 
