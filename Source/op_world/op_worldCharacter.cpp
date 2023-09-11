@@ -13,6 +13,12 @@
 #include "DrawDebugHelpers.h" // Include this for debug drawing
 #include "NavigationSystem.h" // Include NavigationSystem for navigation functionality
 #include "Kismet/GameplayStatics.h" // Include the header for UGameplayStatics
+//#include "AI/Navigation/NavigationSystem.h"
+#include "GameFramework/PlayerController.h"
+//#include "GrapplingHook.h"
+#include "Components/TimelineComponent.h"
+#include "Curves/CurveFloat.h"
+#include "Engine/TimelineTemplate.h"
 
 //////////////////////////////////////////////////////////////////////////
 // Aop_worldCharacter
@@ -55,6 +61,30 @@ Aop_worldCharacter::Aop_worldCharacter()
 	
 	// Set default values for line trace
 	TraceDistance = 5000.0f;
+	float SwingSpeed = 5000.0f;
+
+	// Declare the timeline component
+	UTimelineComponent* MovementTimeline;
+
+	// Declare the curve float
+	UCurveFloat* CurveFloat;
+
+	// Declare the timeline float interp function
+	FOnTimelineFloat InterpFunction;
+
+	// Initialize the timeline component
+	MovementTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("MovementTimeline"));
+
+	// Initialize the curve float (you can load a curve asset here)
+	CurveFloat = nullptr; // Set this to the actual curve you want to use
+
+	// Bind the interp function to your desired function
+	InterpFunction.BindUFunction(this, FName(TEXT("YourInterpFunction")));
+
+	// Add the float curve to the timeline
+	MovementTimeline->AddInterpFloat(CurveFloat, InterpFunction);
+
+
 }
 
 void Aop_worldCharacter::BeginPlay()
@@ -144,12 +174,219 @@ void Aop_worldCharacter::Fire()
 {
 
 		
-		UE_LOG(LogTemp, Warning, TEXT("fire."));
+		//UE_LOG(LogTemp, Warning, TEXT("fire."));
 
 		PerformLineTrace();
-	
+		//Swing();
+		//AGrapplingHook();
+		//StartGrapplingHook();
+		//StopGrapplingHook();
+	//	HandleGrapplingHook();
 }
-/* 
+/*
+void Aop_worldCharacter::PerformLineTrace()
+{
+	// Get the player's viewpoint
+	FVector StartLocation;
+	FRotator ViewRotation;
+	GetActorEyesViewPoint(StartLocation, ViewRotation);
+
+	// Calculate the end location for the line trace
+	TraceStart = StartLocation;
+	TraceEnd = StartLocation + (ViewRotation.Vector() * TraceDistance);
+
+	// Perform the line trace
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this); // Ignore the player character
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams);
+
+	// Check if we hit something
+	if (bHit)
+	{
+		// Handle what happens when we hit something (e.g., apply damage to the hit actor)
+		AActor* HitActor = HitResult.GetActor();
+		if (HitActor)
+		{
+			// Get the player controller
+			APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+			if (PlayerController)
+			{
+				// The time (in seconds) you want the movement to take
+				float MovementTime = 2.0f; // Adjust as needed
+
+				// Calculate the start and end locations
+				StartLocation = PlayerController->GetPawn()->GetActorLocation();
+				FVector EndLocation = HitResult.Location;
+
+				// Initialize variables for interpolation
+				float StartTime = GetWorld()->GetTimeSeconds();
+				float CurrentTime = StartTime;
+
+				// Set up the timeline
+				MovementTimeline->AddInterpFloat(CurveFloat, InterpFunction);
+				
+
+
+				MovementTimeline->PlayFromStart();
+
+				// Wait for the timeline to complete (do nothing)
+				// The timeline will smoothly interpolate the character's location
+				// without blocking the game thread
+			}
+		}
+	}
+
+	// For debugging purposes, draw a line in the editor to visualize the line trace
+	if (GetWorld() && bHit)
+	{
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 5, 0, 1);
+	}
+}
+
+void Aop_worldCharacter::PerformLineTrace()
+{
+	// Get the player's viewpoint
+	FVector StartLocation;
+	FRotator ViewRotation;
+	GetActorEyesViewPoint(StartLocation, ViewRotation);
+
+	// Calculate the end location for the line trace
+	TraceStart = StartLocation;
+	TraceEnd = StartLocation + (ViewRotation.Vector() * TraceDistance);
+
+	// Perform the line trace
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this); // Ignore the player character
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult,TraceStart,TraceEnd,ECC_Visibility,CollisionParams);
+
+	// Check if we hit something
+		if (bHit)
+		{
+			// Handle what happens when we hit something (e.g., apply damage to the hit actor)
+			AActor* HitActor = HitResult.GetActor();
+			 if (HitActor)
+			{
+
+				 //-------------------------
+				  // Get the player controller
+				 APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+				 if (PlayerController)
+				 {
+					 // Set the player's location to the hit location
+					// PlayerController->GetPawn()->SetActorLocation(HitResult.Location);
+
+					 //-----
+						
+					 //---------
+				 }
+				 
+				 //-------------------------------
+					// Check if the player character exists and has a character movement component
+							 //ACharacter* PlayerCharacter = Cast<ACharacter>(GetOwner());
+							 //if (PlayerCharacter && PlayerCharacter->GetCharacterMovement())
+							 //{
+								// // Get the hit location
+								// FVector HitLocation = HitResult.Location;
+
+								// // Calculate the direction from the player's current location to the hit location
+								// FVector Direction = HitLocation - PlayerCharacter->GetActorLocation();
+								// Direction.Normalize();
+								// float SwingSpeed = 5000.0f;
+
+								// // Apply a force to the character's capsule component to move it towards the hit location
+								// //PlayerCharacter->GetCapsuleComponent()->AddImpulse(Direction * SwingSpeed);
+
+								// // set the character's velocity to move towards the hit location
+								////PlayerCharacter->GetCapsuleComponent()->Velocity=Direction * SwingSpeed;
+
+								// // Set the character's velocity to move towards the hit location
+								////PlayerCharacter->GetCharacterMovement()->Velocity = Direction * SwingSpeed;
+
+								// // Apply an impulse to make the character jump towards the hit location
+								// float JumpImpulse = 1000.0f; // Adjust this value as needed
+								// //PlayerCharacter->LaunchCharacter(Direction * JumpImpulse, false, false);
+
+								// // Optionally, you can play a swinging animation here
+							 //}
+				 //---------------------------------
+				 // ------------------------------
+			}
+		}
+
+	// For debugging purposes, draw a line in the editor to visualize the line trace
+	if (GetWorld() && bHit)
+	{
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 5, 0, 1);
+	}
+}*/
+/*
+void  Aop_worldCharacter::AGrapplingHook()
+{
+	// Set up the grappling hook's mesh, collision, and other components.
+	GrapplingHook = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GrapplingHookMesh"));
+	GrapplingHook->SetupAttachment(RootComponent);  // Attach it to the root component or any appropriate component.
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> GrapplingHookMeshAsset(TEXT("/Game/Path/To/GrapplingHookMesh.GrapplingHookMesh"));
+	if (GrapplingHookMeshAsset.Succeeded())
+	{
+		GrapplingHook->SetStaticMesh(GrapplingHookMeshAsset.Object);
+	}
+	GrapplingHook->SetRelativeLocation(FVector(0, 0, 0)); // Adjust the location as needed.
+	GrapplingHook->SetRelativeRotation(FRotator(0, 0, 0)); // Adjust the rotation as needed.
+
+}
+void  Aop_worldCharacter::StartGrapplingHook()
+{
+	if (!GrapplingHook)
+	{
+		// Spawn and attach the grappling hook to the character.
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		GrapplingHook = GetWorld()->SpawnActor<AGrapplingHook>(GrapplingHookClass, GetActorLocation(), FRotator::ZeroRotator, SpawnParams);
+
+		if (GrapplingHook)
+		{
+			// Implement the logic for firing the grappling hook.
+			GrapplingHook->FireGrapple(GetActorLocation(), GetControlRotation().Vector());
+		}
+	}
+}
+
+void  Aop_worldCharacter::StopGrapplingHook()
+{
+	if (GrapplingHook)
+	{
+		// Implement the logic to stop and detach the grappling hook.
+		GrapplingHook->StopGrapple();
+		GrapplingHook->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		GrapplingHook->Destroy();
+		GrapplingHook = nullptr;
+	}
+}
+
+void  Aop_worldCharacter::HandleGrapplingHook()
+{
+	if (GrapplingHook)
+	{
+		// Implement the logic for moving towards the grappling hook target.
+		// Calculate the direction from the character to the hook's location.
+		FVector HookLocation = GrapplingHook->GetActorLocation();
+		FVector CharacterLocation = GetActorLocation();
+		FVector Direction = (HookLocation - CharacterLocation).GetSafeNormal();
+
+		// Apply forces or adjustments to the character's position to move it towards the hook.
+		FVector NewLocation = CharacterLocation + Direction * GrappleSpeed * GetWorld()->DeltaTimeSeconds;
+		SetActorLocation(NewLocation);
+
+		// Optionally, you can play animations or effects here.
+	}
+}
+
+
 void Aop_worldCharacter::Fire(const FInputActionValue& Value)
 {
 	//FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -175,13 +412,7 @@ void Aop_worldCharacter::PerformLineTrace()
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(this); // Ignore the player character
 
-	bool bHit = GetWorld()->LineTraceSingleByChannel(
-		HitResult,
-		TraceStart,
-		TraceEnd,
-		ECC_Visibility,
-		CollisionParams
-	);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult,TraceStart,TraceEnd,ECC_Visibility,CollisionParams);
 
 	// Check if we hit something
 	if (bHit)
@@ -209,91 +440,3 @@ void Aop_worldCharacter::PerformLineTrace()
 		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 5, 0, 1);
 	}
 }
-
-/* 
-void Aop_worldCharacter::PerformLineTrace()
-{
-	// Get the player's viewpoint
-	FVector StartLocation;
-	FRotator ViewRotation;
-	GetActorEyesViewPoint(StartLocation, ViewRotation);
-
-	// Calculate the end location for the line trace
-	TraceStart = StartLocation;
-	TraceEnd = StartLocation + (ViewRotation.Vector() * TraceDistance);
-
-	// Perform the line trace
-	FHitResult HitResult;
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.AddIgnoredActor(this); // Ignore the player character
-
-	bool bHit = GetWorld()->LineTraceSingleByChannel(
-		HitResult,
-		TraceStart,
-		TraceEnd,
-		ECC_Visibility,
-		CollisionParams
-	);
-
-	// Check if we hit something
-if (bHit)
-{
-    // Handle what happens when we hit something (e.g., apply damage to the hit actor)
-    AActor* HitActor = HitResult.GetActor();
-     if (HitActor)
-    {
-
-		 //--
-		  // Get the player controller
-		 APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		 if (PlayerController)
-		 {
-			 // Set the player's location to the hit location
-			 PlayerController->GetPawn()->SetActorLocation(HitResult.Location);
-
-		 }
-		 // --
-        // Get the controller
-   //     AController* MyController = GetController();
-   //     if (MyController)
-   //     {
-			//// Get the player controller
-			//APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-			//if (PlayerController)
-			//{
-			//	// Set the player's location to the hit location
-			//	PlayerController->GetPawn()->SetActorLocation(HitResult.Location);
-			//}
-
-   //         //UNavigationSystemBase* NavSystemBase = GetWorld()->GetNavigationSystem();
-   //         //if (NavSystemBase)
-   //         //{
-   //         //    // Cast to the correct navigation system type
-   //         //    UNavigationSystemV1* NavSystem = Cast<UNavigationSystemV1>(NavSystemBase);
-   //         //    if (NavSystem)
-   //         //    {
-   //         //        // Check if the hit location is reachable
-   //         //        FNavLocation TargetLocation;
-   //         //        if (NavSystem->GetRandomPointInNavigableRadius(HitResult.Location, TraceDistance, TargetLocation))
-   //         //        {
-   //         //           // MyController->MoveToLocation(TargetLocation.Location);
-   //         //        }
-   //         //    }
-           // }
-
-
-       // }
-    }
-}
-
-
-
-	// For debugging purposes, draw a line in the editor to visualize the line trace
-	if (GetWorld() && bHit)
-	{
-		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 5, 0, 1);
-	}
-}
-*/
-
-

@@ -41,6 +41,15 @@ class Aop_worldCharacter : public ACharacter
 	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	//class UInputAction* FireAction;
 
+	// Hook mesh component
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grappling Hook", meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* GrapplingHook;
+
+	// Collision component for the hook
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grappling Hook", meta = (AllowPrivateAccess = "true"))
+		//class UCapsuleComponent* CollisionComponent;
+
+
 public:
 	Aop_worldCharacter();
 	
@@ -73,7 +82,11 @@ public:
 private:
 	// Function to perform line trace for shooting
 	void PerformLineTrace();
-
+	void Swing();
+	void AGrapplingHook();
+	void StartGrapplingHook();
+	void StopGrapplingHook();
+	void HandleGrapplingHook();
 	// Variables for line trace
 	FVector TraceStart;
 	FVector TraceEnd;
