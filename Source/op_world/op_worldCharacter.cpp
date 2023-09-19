@@ -13,6 +13,7 @@
 #include "DrawDebugHelpers.h" // Include this for debug drawing
 #include "NavigationSystem.h" // Include NavigationSystem for navigation functionality
 #include "Kismet/GameplayStatics.h" // Include the header for UGameplayStatics
+#include "CableComponent.h"
 //#include "AI/Navigation/NavigationSystem.h"
 #include "GameFramework/PlayerController.h"
 //#include "GrapplingHook.h"
@@ -84,6 +85,15 @@ Aop_worldCharacter::Aop_worldCharacter()
 	// Add the float curve to the timeline
 	MovementTimeline->AddInterpFloat(CurveFloat, InterpFunction);
 
+	// Create the cable component
+	CableComponent = CreateDefaultSubobject<UCableComponent>(TEXT("CableComponent"));
+
+	// Attach the cable component to the root component (e.g., CapsuleComponent)
+	//CableComponent->AttachToComponent(GetCapsuleComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+
+	// Attach the cable component to the character's mesh component (change to your specific mesh component)
+	//CableComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
+
 
 }
 
@@ -124,16 +134,28 @@ void Aop_worldCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 		//fire with enhanced input)
 		//EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &Aop_worldCharacter::Fire);
 
+		// Bind the function to move the player forward to the "MoveForward" input action
+		PlayerInputComponent->BindAxis("MoveForward", this, &Aop_worldCharacter::MoveForward);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &Aop_worldCharacter::Move);
 	}
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	// Bind left mouse button click event(without enhanced input)
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &Aop_worldCharacter::Fire);
 	
-
+	// Bind the function to move the player forward to the "MoveForward" input action
+	//PlayerInputComponent->BindAxis("MoveForward", this, &Aop_worldCharacter::MoveForward);
 
 }
+// Function to move the player forward
+void Aop_worldCharacter::MoveForward(float Value)
+{
+	// Calculate the forward vector
+	//FVector ForwardVector = GetActorForwardVector();
 
+	// Move the player forward based on the input value
+	//AddMovementInput(ForwardVector, Value);
+}
 void Aop_worldCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
@@ -177,73 +199,13 @@ void Aop_worldCharacter::Fire()
 		//UE_LOG(LogTemp, Warning, TEXT("fire."));
 
 		PerformLineTrace();
-		//Swing();
+		Swing();
 		//AGrapplingHook();
 		//StartGrapplingHook();
 		//StopGrapplingHook();
 	//	HandleGrapplingHook();
 }
 /*
-void Aop_worldCharacter::PerformLineTrace()
-{
-	// Get the player's viewpoint
-	FVector StartLocation;
-	FRotator ViewRotation;
-	GetActorEyesViewPoint(StartLocation, ViewRotation);
-
-	// Calculate the end location for the line trace
-	TraceStart = StartLocation;
-	TraceEnd = StartLocation + (ViewRotation.Vector() * TraceDistance);
-
-	// Perform the line trace
-	FHitResult HitResult;
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.AddIgnoredActor(this); // Ignore the player character
-
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams);
-
-	// Check if we hit something
-	if (bHit)
-	{
-		// Handle what happens when we hit something (e.g., apply damage to the hit actor)
-		AActor* HitActor = HitResult.GetActor();
-		if (HitActor)
-		{
-			// Get the player controller
-			APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-			if (PlayerController)
-			{
-				// The time (in seconds) you want the movement to take
-				float MovementTime = 2.0f; // Adjust as needed
-
-				// Calculate the start and end locations
-				StartLocation = PlayerController->GetPawn()->GetActorLocation();
-				FVector EndLocation = HitResult.Location;
-
-				// Initialize variables for interpolation
-				float StartTime = GetWorld()->GetTimeSeconds();
-				float CurrentTime = StartTime;
-
-				// Set up the timeline
-				MovementTimeline->AddInterpFloat(CurveFloat, InterpFunction);
-				
-
-
-				MovementTimeline->PlayFromStart();
-
-				// Wait for the timeline to complete (do nothing)
-				// The timeline will smoothly interpolate the character's location
-				// without blocking the game thread
-			}
-		}
-	}
-
-	// For debugging purposes, draw a line in the editor to visualize the line trace
-	if (GetWorld() && bHit)
-	{
-		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 5, 0, 1);
-	}
-}
 
 void Aop_worldCharacter::PerformLineTrace()
 {
@@ -396,6 +358,8 @@ void Aop_worldCharacter::Fire(const FInputActionValue& Value)
 	}
 }*/
 
+// Declare a class variable to store the hit location
+FVector HitLocation;
 void Aop_worldCharacter::PerformLineTrace()
 {
 	// Get the player's viewpoint
@@ -412,7 +376,7 @@ void Aop_worldCharacter::PerformLineTrace()
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(this); // Ignore the player character
 
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult,TraceStart,TraceEnd,ECC_Visibility,CollisionParams);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams);
 
 	// Check if we hit something
 	if (bHit)
@@ -421,16 +385,19 @@ void Aop_worldCharacter::PerformLineTrace()
 		AActor* HitActor = HitResult.GetActor();
 		if (HitActor)
 		{
-		//--
-		 // Get the player controller
-		 APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		 if (PlayerController)
-		 {
-			 // Set the player's location to the hit location
-			 PlayerController->GetPawn()->SetActorLocation(HitResult.Location);
+			// Store the hit location in the class variable
+			HitLocation = HitResult.Location;
 
-		 }
-		 // --
+			// Get the player controller
+			APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+			if (PlayerController)
+			{
+				// Set the player's location to the hit location
+				PlayerController->GetPawn()->SetActorLocation(HitResult.Location);
+
+				// Call the Swing function
+				Swing();
+			}
 		}
 	}
 
@@ -440,3 +407,66 @@ void Aop_worldCharacter::PerformLineTrace()
 		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 5, 0, 1);
 	}
 }
+
+void Aop_worldCharacter::Swing()
+{
+	// Check if the player character exists and has a character movement component
+	ACharacter* PlayerCharacter = Cast<ACharacter>(GetOwner());
+	if (PlayerCharacter && PlayerCharacter->GetCharacterMovement())
+	{
+		// Calculate the direction from the player's current location to the stored hit location
+		FVector Direction = HitLocation - PlayerCharacter->GetActorLocation();
+		Direction.Normalize();
+
+		// Calculate the cross product with the up vector to determine the right vector for swinging
+		FVector RightVector = FVector::CrossProduct(Direction, FVector::UpVector);
+		RightVector.Normalize();
+
+		// Apply a force to simulate the swinging motion
+		float SwingForce = 5000.0f; // Adjust this value as needed
+		FVector SwingImpulse = RightVector * SwingForce;
+
+		// Apply the impulse to the character's capsule component
+		UPrimitiveComponent* CharacterCapsuleComponent = PlayerCharacter->FindComponentByClass<UCapsuleComponent>();
+		if (CharacterCapsuleComponent)
+		{
+			CharacterCapsuleComponent->AddImpulse(SwingImpulse);
+		}
+
+		// Set the character's movement mode to flying
+		PlayerCharacter->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+
+		// Set up the cable component
+		if (CableComponent)
+		{
+			// Attach one end of the cable to the player's root component (e.g., the capsule component)
+			CableComponent->AttachToComponent(GetCapsuleComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+
+			// Set the other end of the cable to the hit location
+			CableComponent->SetRelativeLocation(HitLocation);
+			CableComponent->SetVisibility(true);
+		}
+
+		// Set up the cable component
+		//if (CableComponent)
+		{
+			// Attach one end of the cable to the player's root component
+			//CableComponent->AttachToComponent(PlayerCharacter->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+			// Attach the cable component to the character's mesh component (change to your specific mesh component)
+			//CableComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
+			// Attach the cable component to the root component (e.g., CapsuleComponent)
+			//CableComponent->AttachToComponent(GetCapsuleComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+
+			// Set the other end of the cable to the hit location
+			//CableComponent->SetRelativeLocation(HitLocation);
+			//CableComponent->SetVisibility(true);
+		}
+	}
+}
+
+
+
+
+
+
+

@@ -46,8 +46,17 @@ class Aop_worldCharacter : public ACharacter
 		class UStaticMeshComponent* GrapplingHook;
 
 	// Collision component for the hook
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grappling Hook", meta = (AllowPrivateAccess = "true"))
-		//class UCapsuleComponent* CollisionComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grappling Hook", meta = (AllowPrivateAccess = "true"))
+		class UCapsuleComponent* CollisionComponent;
+
+	// Declare a variable for the cable component
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Cable", meta = (AllowPrivateAccess = "true"))
+		class UCableComponent* CableComponent;
+	//-----------------------------------------------------------------------------------------------
+	// Function to move the player forward
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+		void MoveForward(float Value);
+	//-----------------------------------------------------------------------------------------------
 
 
 public:
