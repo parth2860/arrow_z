@@ -41,4 +41,22 @@ void Acp_wepon::Tick(float DeltaTime)
    // UE_LOG(LogTemp, Warning, TEXT("cube."));
 
 }
+void Acp_wepon::MoveSphereToPlayerLocation()
+{
+    // Get a reference to the player character
+    ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(this, 0); // Assumes player 0, adjust as needed
+
+    if (PlayerCharacter)
+    {
+        // Get the player's location
+        FVector PlayerLocation = PlayerCharacter->GetActorLocation();
+
+        // Set the sphere's location to the player's location
+        SetActorLocation(PlayerLocation);
+    }
+}
+void Acp_wepon::show()
+{
+	UE_LOG(LogTemp, Warning, TEXT("show_data."));
+}
 

@@ -380,7 +380,29 @@ void Aop_worldCharacter::PerformLineTrace()
 
 	// Check if we hit something
 	if (bHit)
-	{
+	{	//---------------------------------------------------------------------------------
+		 // Handle what happens when we hit something (e.g., apply damage to the hit actor)
+		AActor* HitActor = HitResult.GetActor();
+		if (HitActor)
+		{
+			// Check if the hit actor is a cube
+			//ACubeActor* CubeActor = Cast<ACubeActor>(HitActor);
+			  Acp_wepon* Acp_wepon = Cast<Acp_wepon>(HitActor);
+			if (Acp_wepon)
+			{
+				// Swap the locations of the player and the cube
+				FVector PlayerLocation = GetActorLocation();
+				FVector CubeLocation = Acp_wepon->GetActorLocation();
+
+				SetActorLocation(CubeLocation);
+				Acp_wepon->SetActorLocation(PlayerLocation);
+
+				// Call any additional logic for the swap
+				//HandleSwap(PlayerLocation, CubeLocation);
+			}
+		}
+		//---------------------------------------------------------------------------------
+
 		// Handle what happens when we hit something (e.g., apply damage to the hit actor)
 		AActor* HitActor = HitResult.GetActor();
 		if (HitActor)

@@ -40,7 +40,7 @@ class Aop_worldCharacter : public ACharacter
 	/** fire Action */
 	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	//class UInputAction* FireAction;
-
+	//-----------------------------------------------------------------------------------------------
 	// Hook mesh component
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grappling Hook", meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* GrapplingHook;
@@ -96,6 +96,7 @@ private:
 	void StartGrapplingHook();
 	void StopGrapplingHook();
 	void HandleGrapplingHook();
+	void HandleCable();
 	// Variables for line trace
 	FVector TraceStart;
 	FVector TraceEnd;

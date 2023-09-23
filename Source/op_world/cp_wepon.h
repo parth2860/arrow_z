@@ -26,4 +26,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 		class UStaticMeshComponent* CubeMeshComponent;
+	//move sphere to player location
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+		void MoveSphereToPlayerLocation();
+	UFUNCTION(BlueprintCallable, Category = "show")
+		void show();
+
 };
