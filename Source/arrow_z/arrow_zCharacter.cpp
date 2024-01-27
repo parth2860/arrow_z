@@ -67,6 +67,7 @@ void Aarrow_zCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Hello, this is a printed message in C++!"));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -128,3 +129,9 @@ void Aarrow_zCharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
+
+/* 
+void Aarrow_zCharacter::PrintMessage() {
+	// Replace with your own log category and verbosity level if needed
+	UE_LOG(LogTemp, Warning, TEXT("Hello, this is a printed message in C++!"));
+}*/
