@@ -67,7 +67,7 @@ void Aarrow_zCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Hello, this is a printed message in C++!"));
+	//UE_LOG(LogTemp, Warning, TEXT("Hello, this is a printed message in C++!"));
 }
 
 //////////////////////////////////////////////////////////////////////////
