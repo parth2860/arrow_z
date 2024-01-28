@@ -51,6 +51,8 @@ void ALightSwitchBoth::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp,
     //print essage in screen
     if (GEngine)
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("light off"));
+    //if(GEngine)
+   // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("World delta for current frame equals %f"), GetWorld()->TimeSeconds));
 }
 
 void ALightSwitchBoth::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
