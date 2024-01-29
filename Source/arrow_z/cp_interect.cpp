@@ -2,7 +2,7 @@
 
 
 #include "cp_interect.h"
-#include "Components/BoxComponent.h"
+//#include "Components/BoxComponent.h"
 
 // Sets default values
 Acp_interect::Acp_interect()

@@ -22,9 +22,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	/* 
 	UPROPERTY(VisibleAnywhere, Category = "Box Components")
 		class BoxComponent* box_area;
 	UPROPERTY(VisibleAnywhere, Category = "Box Components")
-		class BoxComponent* BoxCollision;
+		class BoxComponent* BoxCollision;*/
 };
