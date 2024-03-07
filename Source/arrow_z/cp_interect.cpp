@@ -16,7 +16,7 @@ Acp_interect::Acp_interect()
 
 	// Create the Box Collision Component
 	MyBoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("MyBoxCollision"));
-	MyBoxCollision->SetBoxExtent(FVector(32.f, 32.f, 96.f)); // Set the box dimensions
+	MyBoxCollision->SetBoxExtent(FVector(50.f, 50.f, 50.f)); // Set the box dimensions
 	MyBoxCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); // Set collision type (query and physics)
 	MyBoxCollision->SetCollisionObjectType(ECollisionChannel::ECC_Pawn); // Set your desired collision channel
 
