@@ -3,6 +3,9 @@
 
 #include "cp_interect.h"
 #include "Components/BoxComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/ArrowComponent.h"
+//#include "Engine/Engine.h"
 
 // Sets default values
 Acp_interect::Acp_interect()
@@ -22,6 +25,18 @@ Acp_interect::Acp_interect()
 
 	// Bind the overlap function to the OnComponentBeginOverlap event
 	MyBoxCollision->OnComponentBeginOverlap.AddDynamic(this, &Acp_interect::OnBoxOverlap);
+
+	//plane
+	mesh_plane = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	//mesh_plane->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+    //mesh_plane->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+	//mesh_plane->SetRelativeTransform(FTransform(FRotator(0.0f, 0.0f, 0.0f), FVector(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f)));
+	//mesh_plane->AddRelativeRotation(FRotator(5.0f, 5.0f, 5.0f));
+    mesh_plane->SetWorldRotation(FRotator(5.0f, 5.0f, 5.0f));
+	mesh_plane->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
+    //arrow
+	arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
 
 }
 
@@ -49,5 +64,12 @@ void Acp_interect::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("overlapped"));
 	}
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("outside"));
+
+	//UWorld::SpawnActor();
+	//UClass* ActorClassToSpawn = LightSwitchBoth::StaticClass();
+	//FTransform SpawnTransform = FTransform::Identity; // Set your desired transform
+	//AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorClassToSpawn, SpawnTransform);
 }
 

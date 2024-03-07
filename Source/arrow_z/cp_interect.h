@@ -29,10 +29,16 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Box Components")
 		class UBoxComponent* BoxCollision;//boxcompontent//absent of class
 	*/
+	//box collision
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
 		class UBoxComponent* MyBoxCollision = nullptr;
 
 	UFUNCTION()
 		void OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	//
+	//static mesh
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+		class UStaticMeshComponent* mesh_plane;
+	// arrow
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Arrow")
+		class UArrowComponent* arrow;
 };
