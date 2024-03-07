@@ -22,9 +22,17 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	/* 
+	// 
 	UPROPERTY(VisibleAnywhere, Category = "Box Components")
-		class BoxComponent* box_area;
+		class UBoxComponent* box_area = nullptr;
+
 	UPROPERTY(VisibleAnywhere, Category = "Box Components")
-		class BoxComponent* BoxCollision;*/
+		class UBoxComponent* BoxCollision;//boxcompontent
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+		UBoxComponent* MyBoxCollision = nullptr;
+
+	UFUNCTION()
+		void OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	//
 };
