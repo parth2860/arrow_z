@@ -87,6 +87,9 @@ void Aarrow_zCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &Aarrow_zCharacter::Look);
+
+		// Dash
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &Aarrow_zCharacter::Dash);
 	}
 	else
 	{
@@ -96,6 +99,9 @@ void Aarrow_zCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void Aarrow_zCharacter::Move(const FInputActionValue& Value)
 {
+	//if (GEngine)
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("moveing"));
+
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -135,3 +141,22 @@ void Aarrow_zCharacter::PrintMessage() {
 	// Replace with your own log category and verbosity level if needed
 	UE_LOG(LogTemp, Warning, TEXT("Hello, this is a printed message in C++!"));
 }*/
+
+void Aarrow_zCharacter::Dash(const FInputActionValue& Value)
+{
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("dash"));
+
+	//LaunchCharacter(FVector(2, 0, 1) * 1000, false, false);//only jump to fixed direction
+	
+	
+	const FVector ForwardDir = FollowCamera->GetForwardVector();
+	const float plMomentum = 100.0f; // Assign a value to plMomentum (adjust as needed)
+	const float plJumpVelocity = 500.0f; // Assign a value to plJumpVelocity (adjust as needed)
+	const FVector AddForce = ForwardDir * plMomentum + FVector(2, 0, 1) * plJumpVelocity;
+
+	//if (FollowCamera->IsMovingOnGround()) {
+		//dJumped = false;
+		LaunchCharacter(AddForce, false, false);
+	//}
+}
