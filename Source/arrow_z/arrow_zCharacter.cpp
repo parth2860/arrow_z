@@ -164,15 +164,16 @@ void Aarrow_zCharacter::Dash(const FInputActionValue& Value)
 }
 void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
 {
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("interact"));
-
+	
 	//line trace
 
 	// Set up the parameters for the line trace
 	FVector StartLocation = GetActorLocation(); // Starting point (usually your character's location)
-	FVector EndLocation = StartLocation + (GetActorForwardVector() * 1000.0f); // Extend the line forward by 1000 units
-
+	// Get the direction the camera is looking 
+	FVector CameraForwardDir = FollowCamera->GetForwardVector();//camera forward direction
+	//FVector EndLocation = StartLocation + (GetActorForwardVector() * 1500.0f); // Extend the line forward by 1500 units,as per mesh position
+	FVector EndLocation = StartLocation + (CameraForwardDir * 1000.0f);//as per camera position
+	
 	FHitResult HitResult; // Stores the result of the trace
 
 	// Perform the line trace
@@ -189,15 +190,37 @@ void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
 		TraceParams
 	);
 
+ 
+	//draw line 
 	if (bHit)
 	{
 		// Handle the hit result (e.g., apply damage, interact with objects, etc.)
 		// You can access HitResult.Actor, HitResult.Location, HitResult.Normal, etc.
 		// For debugging, you can draw a line to visualize the trace:
-		DrawDebugLine(GetWorld(), StartLocation, HitResult.Location, FColor::Red, false, 1.0f, 0, 1.0f);
+		DrawDebugLine(GetWorld(), StartLocation, HitResult.Location, FColor::Red, false, 5.0f, 0, 1.0f);
+
+		// Handle the hit result
+		AActor* HitActor = HitResult.GetActor();
+		if (HitActor)
+		{
+			FString ActorName = HitActor->GetName();
+			UE_LOG(LogTemp, Warning, TEXT("Hit actor: %s"), *ActorName);
+
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Hit actor:"));
+			}
+		
+			// Destroy the actor
+			//HitActor->Destroy();
+		}
 	}
 	else
 	{
-		// No hit, handle accordingly
+		DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Green, false, 5.0f, 0, 1.0f);
 	}
+	
+	
+	//teleport at end location
+	//SetActorLocation(EndLocation);
 }
