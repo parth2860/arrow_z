@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "DrawDebugHelpers.h" // Include for visual debugging
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -90,6 +91,9 @@ void Aarrow_zCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 		// Dash
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &Aarrow_zCharacter::Dash);
+
+		//interact
+		EnhancedInputComponent->BindAction(Interact_Action, ETriggerEvent::Started, this, &Aarrow_zCharacter::Interact_action);
 	}
 	else
 	{
@@ -144,13 +148,11 @@ void Aarrow_zCharacter::PrintMessage() {
 
 void Aarrow_zCharacter::Dash(const FInputActionValue& Value)
 {
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("dash"));
-
 	//LaunchCharacter(FVector(2, 0, 1) * 1000, false, false);//only jump to fixed direction
 	
 	
-	const FVector ForwardDir = FollowCamera->GetForwardVector();
+	//const FVector ForwardDir = FollowCamera->GetForwardVector();
+	const FVector ForwardDir = GetCapsuleComponent()->GetForwardVector();
 	const float plMomentum = 100.0f; // Assign a value to plMomentum (adjust as needed)
 	const float plJumpVelocity = 500.0f; // Assign a value to plJumpVelocity (adjust as needed)
 	const FVector AddForce = ForwardDir * plMomentum + FVector(2, 0, 1) * plJumpVelocity;
@@ -159,4 +161,43 @@ void Aarrow_zCharacter::Dash(const FInputActionValue& Value)
 		//dJumped = false;
 		LaunchCharacter(AddForce, false, false);
 	//}
+}
+void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
+{
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("interact"));
+
+	//line trace
+
+	// Set up the parameters for the line trace
+	FVector StartLocation = GetActorLocation(); // Starting point (usually your character's location)
+	FVector EndLocation = StartLocation + (GetActorForwardVector() * 1000.0f); // Extend the line forward by 1000 units
+
+	FHitResult HitResult; // Stores the result of the trace
+
+	// Perform the line trace
+	FCollisionQueryParams TraceParams(FName(TEXT("LineTrace")), true, this);
+	TraceParams.bTraceComplex = true; // Enable complex collision checks
+	TraceParams.AddIgnoredActor(this); // Ignore the character itself
+
+	// Perform the actual line trace
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		StartLocation,
+		EndLocation,
+		ECC_Visibility, // Collision channel (you can customize this)
+		TraceParams
+	);
+
+	if (bHit)
+	{
+		// Handle the hit result (e.g., apply damage, interact with objects, etc.)
+		// You can access HitResult.Actor, HitResult.Location, HitResult.Normal, etc.
+		// For debugging, you can draw a line to visualize the trace:
+		DrawDebugLine(GetWorld(), StartLocation, HitResult.Location, FColor::Red, false, 1.0f, 0, 1.0f);
+	}
+	else
+	{
+		// No hit, handle accordingly
+	}
 }

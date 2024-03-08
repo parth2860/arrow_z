@@ -48,6 +48,10 @@ class Aarrow_zCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* DashAction;
 
+	/** interact_action Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		UInputAction* Interact_Action;
+
 public:
 	Aarrow_zCharacter();
 	
@@ -62,6 +66,9 @@ protected:
 
 	/** Called for dash input */
 	void Dash(const FInputActionValue& Value);
+
+	/** Called for interact_action input */
+	void Interact_action(const FInputActionValue& Value);
 			
 
 protected:
