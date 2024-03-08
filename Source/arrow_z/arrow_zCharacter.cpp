@@ -142,8 +142,13 @@ void Aarrow_zCharacter::Look(const FInputActionValue& Value)
 
 /* 
 void Aarrow_zCharacter::PrintMessage() {
-	// Replace with your own log category and verbosity level if needed
+	// log message
 	UE_LOG(LogTemp, Warning, TEXT("Hello, this is a printed message in C++!"));
+	//on screen message
+	if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Hit actor:"));
+			}
 }*/
 
 void Aarrow_zCharacter::Dash(const FInputActionValue& Value)
@@ -204,11 +209,12 @@ void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
 		if (HitActor)
 		{
 			FString ActorName = HitActor->GetName();
-			UE_LOG(LogTemp, Warning, TEXT("Hit actor: %s"), *ActorName);
+			FString DebugMessage = FString::Printf(TEXT("Hit actor: %s"), *ActorName);
+			//UE_LOG(LogTemp, Warning, TEXT("Hit actor: %s"), *ActorName);
 
 			if (GEngine)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Hit actor:"));
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, DebugMessage);
 			}
 		
 			// Destroy the actor
