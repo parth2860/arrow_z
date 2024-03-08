@@ -11,6 +11,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "DrawDebugHelpers.h" // Include for visual debugging
+#include "cp_interect.h"//spawned actor
+#include "LightSwitchBoth.h"//spawned actor
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -182,7 +184,7 @@ void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
 	FHitResult HitResult; // Stores the result of the trace
 
 	// Perform the line trace
-	FCollisionQueryParams TraceParams(FName(TEXT("LineTrace")), true, this);
+	FCollisionQueryParams TraceParams(FName(TEXT("LineTrace")), true, this);//?
 	TraceParams.bTraceComplex = true; // Enable complex collision checks
 	TraceParams.AddIgnoredActor(this); // Ignore the character itself
 
@@ -195,7 +197,7 @@ void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
 		TraceParams
 	);
 
- 
+ /* 
 	//draw line 
 	if (bHit)
 	{
@@ -224,6 +226,27 @@ void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
 	else
 	{
 		DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Green, false, 5.0f, 0, 1.0f);
+	}
+	*/
+
+	// Spawn a small cube at the hit location
+	FVector SpawnLocation = EndLocation;
+	FRotator SpawnRotation = FRotator::ZeroRotator; // You can customize the rotation
+	FActorSpawnParameters SpawnParams;
+	//Actor* SpawnedCube = GetWorld()->SpawnActor<AActor>(cp_interect::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
+	//Aarrow_zCharacter* SpawnedCube = GetWorld()->SpawnActor<Aarrow_zCharacter>(SpawnLocation, SpawnRotation, SpawnParams);
+	// SpawnedCube->SetActorScale3D(FVector(2.5f, 2.5f, 2.5f)); // You can customize the scale
+
+	//Acp_interect* SpawnedCube = GetWorld()->SpawnActor<Acp_interect>(SpawnLocation, SpawnRotation, SpawnParams);
+	ALightSwitchBoth* SpawnedCube = GetWorld()->SpawnActor<ALightSwitchBoth>(SpawnLocation, SpawnRotation, SpawnParams);
+	if (SpawnedCube)
+	{
+		// Customize the cube's properties (e.g., material, scale, etc.)
+		// ...
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("spawned"));
+		}
 	}
 	
 	
