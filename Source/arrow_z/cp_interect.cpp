@@ -22,10 +22,13 @@ Acp_interect::Acp_interect()
 	MyBoxCollision->SetBoxExtent(FVector(50.f, 50.f, 50.f)); // Set the box dimensions
 	MyBoxCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); // Set collision type (query and physics)
 	MyBoxCollision->SetCollisionObjectType(ECollisionChannel::ECC_Pawn); // Set your desired collision channel
+	RootComponent = MyBoxCollision; // Set the root component
 
 	// Bind the overlap function to the OnComponentBeginOverlap event
 	MyBoxCollision->OnComponentBeginOverlap.AddDynamic(this, &Acp_interect::OnBoxOverlap);
-
+	//MyBoxCollision->OnComponentEndOverlap.AddDynamic(this, &Acp_interect::OnBoxOverlapEnd);
+	//MyBoxCollision->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+	// 
 	//plane
 	mesh_plane = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	//mesh_plane->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
@@ -62,10 +65,30 @@ void Acp_interect::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 		UE_LOG(LogTemp, Warning, TEXT("Box overlapped with actor: %s"), *OtherActor->GetName());
 		//print message in screen
 		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("overlapped"));
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("overlapped inside"));
 	}
 	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("outside"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("inside"));
+
+	//UWorld::SpawnActor();
+	//UClass* ActorClassToSpawn = LightSwitchBoth::StaticClass();
+	//FTransform SpawnTransform = FTransform::Identity; // Set your desired transform
+	//AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorClassToSpawn, SpawnTransform);
+}
+//void Acp_interect::OnBoxOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void Acp_interect::OnBoxOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	// Handle the overlap event here
+	if (OtherActor)
+	{
+		// log message for debugging
+		UE_LOG(LogTemp, Warning, TEXT("Box overlapped with actor: %s"), *OtherActor->GetName());
+		//print message in screen
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("overlapped outside"));
+	}
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, .0f, FColor::Red, TEXT("outside"));
 
 	//UWorld::SpawnActor();
 	//UClass* ActorClassToSpawn = LightSwitchBoth::StaticClass();

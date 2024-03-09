@@ -35,6 +35,11 @@ public:
 
 	UFUNCTION()
 		void OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+		//void OnBoxOverlapend(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	    void OnBoxOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
+	
 	//static mesh
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 		class UStaticMeshComponent* mesh_plane;
