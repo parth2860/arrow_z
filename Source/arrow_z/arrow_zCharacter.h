@@ -52,6 +52,9 @@ class Aarrow_zCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 		UInputAction* Interact_Action;
 
+	
+
+
 public:
 	Aarrow_zCharacter();
 	
@@ -83,5 +86,12 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	// Declare dash properties
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
+		float DashDistance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
+		float DashCooldown;
 };
 

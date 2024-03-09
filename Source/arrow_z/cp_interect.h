@@ -15,6 +15,9 @@ public:
 	// Sets default values for this actor's properties
 	Acp_interect();
 
+	// Declare the delegate
+	//DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBeginOverlap);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,13 +40,18 @@ public:
 		void OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()
 		//void OnBoxOverlapend(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	    void OnBoxOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-	
+	    //void OnBoxOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	    void OnBoxOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
 	//static mesh
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 		class UStaticMeshComponent* mesh_plane;
 	// arrow
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Arrow")
+
+
+
+
+
 		class UArrowComponent* arrow;
 };

@@ -156,8 +156,7 @@ void Aarrow_zCharacter::PrintMessage() {
 void Aarrow_zCharacter::Dash(const FInputActionValue& Value)
 {
 	//LaunchCharacter(FVector(2, 0, 1) * 1000, false, false);//only jump to fixed direction
-	
-	
+	/* 
 	//const FVector ForwardDir = FollowCamera->GetForwardVector();
 	const FVector ForwardDir = GetCapsuleComponent()->GetForwardVector();
 	const float plMomentum = 100.0f; // Assign a value to plMomentum (adjust as needed)
@@ -168,6 +167,44 @@ void Aarrow_zCharacter::Dash(const FInputActionValue& Value)
 		//dJumped = false;
 		LaunchCharacter(AddForce, false, false);
 	//}
+	*/
+	//--------------------------------------------------------//
+	// Set default values
+	DashDistance = 1000.0f; // Adjust as needed
+	float DashForce = 1000.0f; // Adjust as needed
+	DashCooldown = 2.0f;    // Adjust as needed
+	float LastDashTime = 1.0f;
+	// Check if dash is on cooldown
+	if (GetWorld()->GetTimeSeconds() < LastDashTime + DashCooldown)
+	{
+		// Dash is still on cooldown
+		return;
+	}
+
+	// Get the forward vector of the character
+	FVector ForwardVector = GetActorForwardVector();
+	//-------------
+	// Calculate the dash location
+	//FVector DashLocation = GetActorLocation() + ForwardVector * DashDistance;
+
+	// Move the character to the dash location
+	//SetActorLocation(DashLocation);
+	//-------------
+	// Calculate the dash impulse
+	//FVector DashImpulse = ForwardVector * DashDistance;
+
+	// Apply the impulse to the character
+	//LaunchCharacter(DashImpulse, true, true);
+	//-------------
+	// Calculate the dash force
+	FVector DashForceVector = ForwardVector * DashForce;
+
+	// Apply the force to the character
+	GetCharacterMovement()->AddForce(DashForceVector);
+	//-------------
+	// Update the last dash time
+	LastDashTime = GetWorld()->GetTimeSeconds();
+	//--------------------------------------------------------//
 }
 void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
 {
