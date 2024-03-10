@@ -23,4 +23,16 @@ public:
 	// Called every framecs
 	virtual void Tick(float DeltaTime) override;
 
+	//UPROPERTY(Category = Meshes, VisibleAnywhere)
+	// class TSubobjectPtr<UStaticMeshComponent> CubeMesh;
+
+	 UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Default")
+	 UStaticMeshComponent* SphereMesh;
+	 
+	 float RotationSpeed;
+
+	 // Function to set the rotation speed of the sphere
+	 UFUNCTION(BlueprintCallable, Category = "Rotation")
+	 void SetRotationSpeed(float Speed, float DeltaTime);
+
 };
