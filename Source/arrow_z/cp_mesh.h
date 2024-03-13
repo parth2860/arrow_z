@@ -23,8 +23,10 @@ public:
 	// Called every framecs
 	virtual void Tick(float DeltaTime) override;
 
-	//UPROPERTY(Category = Meshes, VisibleAnywhere)
-	// class TSubobjectPtr<UStaticMeshComponent> CubeMesh;
+	
+//protected:
+	 //UPROPERTY(Category = Meshes, VisibleAnywhere)
+	 // class TSubobjectPtr<UStaticMeshComponent> CubeMesh;
 
 	 UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Default")
 	 UStaticMeshComponent* SphereMesh;
@@ -34,5 +36,13 @@ public:
 	 // Function to set the rotation speed of the sphere
 	 UFUNCTION(BlueprintCallable, Category = "Rotation")
 	 void SetRotationSpeed(float Speed, float DeltaTime);
+
+	 UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+	 class UBoxComponent* BoxCollisionarea = nullptr;
+
+	 UFUNCTION()
+	 void OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	 UFUNCTION()
+	  void OnBoxOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 };
