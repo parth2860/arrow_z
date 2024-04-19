@@ -96,6 +96,10 @@ void Aarrow_zCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 		//interact
 		EnhancedInputComponent->BindAction(Interact_Action, ETriggerEvent::Started, this, &Aarrow_zCharacter::Interact_action);
+
+		//combat
+		//EnhancedInputComponent->BindAction(Combat, ETriggerEvent::Started, this, &Aarrow_zCharacter::Combat);
+		EnhancedInputComponent->BindAction(Combat_Action, ETriggerEvent::Started, this, &Aarrow_zCharacter::Combat);
 	}
 	else
 	{
@@ -289,4 +293,28 @@ void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
 	
 	//teleport at end location
 	//SetActorLocation(EndLocation);
+}
+
+void Aarrow_zCharacter::Combat(const FInputActionValue& Value)
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("combat"));
+	}
+	//---
+	if (MyAnimationMontage)
+	{
+		// Create animation instance if not already created
+		if (!MyAnimInstance)
+		{
+			MyAnimInstance = GetMesh()->GetAnimInstance();
+		}
+
+		// Play animation montage
+		if (MyAnimInstance)
+		{
+			MyAnimInstance->Montage_Play(MyAnimationMontage);
+		}
+	}
+	//---
 }

@@ -52,6 +52,11 @@ class Aarrow_zCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 		UInputAction* Interact_Action;
 
+	/** interact_action Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	//UInputAction* Combat;
+	UInputAction* Combat_Action;
+
 	
 
 
@@ -72,7 +77,9 @@ protected:
 
 	/** Called for interact_action input */
 	void Interact_action(const FInputActionValue& Value);
-			
+
+	/** Called for comabt input */
+	void Combat(const FInputActionValue& Value);
 
 protected:
 	// APawn interface
@@ -93,5 +100,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
 		float DashCooldown;
+
+		UPROPERTY(EditAnywhere, Category = "Animation")
+		class UAnimMontage* MyAnimationMontage;
+
+		UPROPERTY()
+		class UAnimInstance* MyAnimInstance;
 };
 
