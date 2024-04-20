@@ -301,7 +301,7 @@ void Aarrow_zCharacter::Combat(const FInputActionValue& Value)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("combat"));
 	}
-	//---
+	/* basic anima montages
 	if (MyAnimationMontage)
 	{
 		// Create animation instance if not already created
@@ -316,5 +316,68 @@ void Aarrow_zCharacter::Combat(const FInputActionValue& Value)
 			MyAnimInstance->Montage_Play(MyAnimationMontage);
 		}
 	}
-	//---
+	*/
+	
+	//PlayComboAttack();
 }
+ /* infinite combo
+void Aarrow_zCharacter::PlayComboAttack()
+{
+	if (ComboAttackMontages.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No combo attack montages to play."));
+		return;
+	}
+	//if (ComboAttackMontages.Num() >= 0)
+	//{
+		//UE_LOG(LogTemp, Warning, TEXT("combo olay."));
+		//return;
+	//}
+
+	MyAnimInstance = GetMesh()->GetAnimInstance();
+	if (!MyAnimInstance)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to get animation instance."));
+		return;
+	}
+
+	// Bind OnMontageEnded event
+	//if (MyAnimInstance->OnMontageEnded.IsBoundToObject(this))
+	{
+		MyAnimInstance->OnMontageEnded.RemoveDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
+	}
+	MyAnimInstance->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
+
+	// Start playing the first combo montage
+	CurrentMontageIndex = 0;
+	PlayNextComboMontage();
+}
+
+void Aarrow_zCharacter::PlayNextComboMontage()
+{
+	if (ComboAttackMontages.IsValidIndex(CurrentMontageIndex))
+	{
+		// Play the next combo montage
+		MyAnimInstance->Montage_Play(ComboAttackMontages[CurrentMontageIndex]);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid montage index."));
+	}
+}
+
+void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	// Increment the montage index
+	++CurrentMontageIndex;
+
+	// If reached the end of the combo, restart from the beginning
+	if (CurrentMontageIndex >= ComboAttackMontages.Num())
+	{
+		CurrentMontageIndex = 0;
+	}
+
+	// Play the next combo montage
+	PlayNextComboMontage();
+}
+*/

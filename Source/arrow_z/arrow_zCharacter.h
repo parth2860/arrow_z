@@ -100,11 +100,27 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
 		float DashCooldown;
-
+		/* basic anima instance to editor 
 		UPROPERTY(EditAnywhere, Category = "Animation")
 		class UAnimMontage* MyAnimationMontage;
 
 		UPROPERTY()
 		class UAnimInstance* MyAnimInstance;
+		*/
+
+		/* infinete anima play 
+		UPROPERTY(EditAnywhere, Category = "Animation")
+		TArray<class UAnimMontage*> ComboAttackMontages;
+
+		UPROPERTY()
+		class UAnimInstance* MyAnimInstance;
+
+		int32 CurrentMontageIndex;
+
+		void PlayComboAttack();
+		void PlayNextComboMontage();
+		UFUNCTION()
+		void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+		*/
 };
 
