@@ -234,7 +234,7 @@ void Aarrow_zCharacter::Dash(const FInputActionValue& Value)
 	// Set default values
 	DashDistance = 1000.0f; // Adjust as needed
 	float DashForce = 1000.0f; // Adjust as needed
-	DashCooldown = 2.0f;    // Adjust as needed
+	DashCooldown = 1.0f;    // Adjust as needed
 	float LastDashTime = 1.0f;
 	// Check if dash is on cooldown
 	if (GetWorld()->GetTimeSeconds() < LastDashTime + DashCooldown)
@@ -266,6 +266,7 @@ void Aarrow_zCharacter::Dash(const FInputActionValue& Value)
 	//-------------
 	// Update the last dash time
 	LastDashTime = GetWorld()->GetTimeSeconds();
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("dash"));
 	//--------------------------------------------------------//
 }
 void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
