@@ -108,7 +108,7 @@ public:
 		class UAnimInstance* MyAnimInstance;
 		*/
 
-		/* infinete anima play 
+		// infinete anima play 
 		UPROPERTY(EditAnywhere, Category = "Animation")
 		TArray<class UAnimMontage*> ComboAttackMontages;
 
@@ -121,24 +121,19 @@ public:
 		void PlayNextComboMontage();
 		UFUNCTION()
 		void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
-		*/
-		/* 
-		UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "COMBAT")
-		UAnimMontage* light_attack_montage;
-
-		void Attack();
-
-		UFUNCTION()
-		//void notify_begin(FName a_notifyname,const branching);
-		*/
+		//--
+		
 
 		//-combo_1
 		// Animation montage references
 
 		// Combo - related variables
 		int32 ComboCount;
+		// Declare a variable to track the number of clicks
+		int32 NumClicks = 0;
 		bool bIsAttacking;
 
+		void ResetNumClicks();
 		// Function to trigger attacks
 		void StartComboAttack();
 
@@ -155,7 +150,7 @@ public:
 		void HandleCombo();
 		// Event called when an animation montage ends
 		//UFUNCTION()
-		void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+		//void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 		//--------------------------------------------
 		
 		/* combo-2

@@ -325,35 +325,25 @@ void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
 	//teleport at end location
 	//SetActorLocation(EndLocation);
 }
-
+//-
 void Aarrow_zCharacter::Combat(const FInputActionValue& Value)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("combat"));
-	}
-	/* basic anima montages
-	if (MyAnimationMontage)
-	{
-		// Create animation instance if not already created
-		if (!MyAnimInstance)
-		{
-			MyAnimInstance = GetMesh()->GetAnimInstance();
-		}
+	// Increment the number of clicks
+	NumClicks++;
 
-		// Play animation montage
-		if (MyAnimInstance)
-		{
-			MyAnimInstance->Montage_Play(MyAnimationMontage);
-		}
-	}
-	*/
-	
-	//PlayComboAttack();
-	StartComboAttack();
-	//LightAttack();
+	// Reset the number of clicks after a delay
+	FTimerHandle ClickTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(ClickTimerHandle, this, &Aarrow_zCharacter::ResetNumClicks, 0.5f, false);
+
+	// Play the appropriate combo attack based on the number of clicks
+	PlayComboAttack();
 }
- /* infinite combo
+
+void Aarrow_zCharacter::ResetNumClicks()
+{
+	NumClicks = 0;
+}
+
 void Aarrow_zCharacter::PlayComboAttack()
 {
 	if (ComboAttackMontages.Num() == 0)
@@ -361,11 +351,6 @@ void Aarrow_zCharacter::PlayComboAttack()
 		UE_LOG(LogTemp, Warning, TEXT("No combo attack montages to play."));
 		return;
 	}
-	//if (ComboAttackMontages.Num() >= 0)
-	//{
-		//UE_LOG(LogTemp, Warning, TEXT("combo olay."));
-		//return;
-	//}
 
 	MyAnimInstance = GetMesh()->GetAnimInstance();
 	if (!MyAnimInstance)
@@ -375,46 +360,35 @@ void Aarrow_zCharacter::PlayComboAttack()
 	}
 
 	// Bind OnMontageEnded event
-	//if (MyAnimInstance->OnMontageEnded.IsBoundToObject(this))
-	{
-		MyAnimInstance->OnMontageEnded.RemoveDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
-	}
+	MyAnimInstance->OnMontageEnded.RemoveDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
 	MyAnimInstance->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
 
-	// Start playing the first combo montage
-	CurrentMontageIndex = 0;
-	PlayNextComboMontage();
-}
+	// Determine the number of animations to play based on the number of clicks
+	int32 NumAnimationsToPlay = FMath::Clamp(NumClicks, 0, ComboAttackMontages.Num());
 
-void Aarrow_zCharacter::PlayNextComboMontage()
-{
-	if (ComboAttackMontages.IsValidIndex(CurrentMontageIndex))
+	// Play the combo attack animations
+	for (int32 Index = 0; Index < NumAnimationsToPlay; ++Index)
 	{
-		// Play the next combo montage
-		MyAnimInstance->Montage_Play(ComboAttackMontages[CurrentMontageIndex]);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Invalid montage index."));
+		if (ComboAttackMontages.IsValidIndex(Index))
+		{
+			MyAnimInstance->Montage_Play(ComboAttackMontages[Index]);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Invalid montage index."));
+		}
 	}
 }
 
 void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
-	// Increment the montage index
-	++CurrentMontageIndex;
-
-	// If reached the end of the combo, restart from the beginning
-	if (CurrentMontageIndex >= ComboAttackMontages.Num())
-	{
-		CurrentMontageIndex = 0;
-	}
-
-	// Play the next combo montage
-	PlayNextComboMontage();
+	// Perform any necessary actions after the combo attack animations have ended
+	// For example, resetting the combo state, allowing for new combos, etc.
 }
-*/
-// combo 1
+
+
+//-
+/*  combo 1
 void Aarrow_zCharacter::StartComboAttack()
 {
 	if (!bIsAttacking)
@@ -476,7 +450,7 @@ void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 	HandleCombo();
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("MONTAGE END"));
 }
-//--
+*/
 /* combo_2
 void Aarrow_zCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload)
 {// Decrement Combo Index
