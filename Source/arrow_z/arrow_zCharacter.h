@@ -122,5 +122,60 @@ public:
 		UFUNCTION()
 		void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 		*/
+		/* 
+		UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "COMBAT")
+		UAnimMontage* light_attack_montage;
+
+		void Attack();
+
+		UFUNCTION()
+		//void notify_begin(FName a_notifyname,const branching);
+		*/
+
+		//-combo_1
+		// Animation montage references
+
+		// Combo - related variables
+		int32 ComboCount;
+		bool bIsAttacking;
+
+		// Function to trigger attacks
+		void StartComboAttack();
+
+		UPROPERTY(EditDefaultsOnly, Category = "Combat")
+		UAnimMontage* Attack1Montage;
+
+		UPROPERTY(EditDefaultsOnly, Category = "Combat")
+		UAnimMontage* Attack2Montage;
+
+		UPROPERTY(EditDefaultsOnly, Category = "Combat")
+		UAnimMontage* Attack3Montage;
+
+		// Function to handle combo logic
+		void HandleCombo();
+		// Event called when an animation montage ends
+		//UFUNCTION()
+		void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+		//--------------------------------------------
+		
+		/* combo-2
+		// Player Anim Montages
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* m_pJumpMontage;
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* m_pLight_AttackMontage;
+
+		// Method for handling light attacks
+		void LightAttack();
+		// Method for getting whether player is attacking
+		bool IsAttacking();
+		int m_iComboAttackIndex = 0;
+
+	// Event handler for montage notify begin
+	UFUNCTION()
+	void HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload);
+	*/
+
 };
 

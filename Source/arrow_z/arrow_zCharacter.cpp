@@ -55,6 +55,22 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+	// Initialize variables
+	ComboCount = 0;
+	bIsAttacking = false;
+
+	//Attack1Montage = LoadObject<UAnimMontage>(nullptr, TEXT("D:/Users/PARTH/Documents/Unreal Projects/c++/arrow_z/Content/assets/animation/Attack1_Montage.uasset"));
+	//Attack1Montage = LoadObject<UAnimMontage>(nullptr, TEXT(" /arrow_z/Content/assets/animation/Attack1_Montage.uasset"));
+	//Attack2Montage = LoadObject<UAnimMontage>(nullptr, TEXT("D:/Users/PARTH/Documents/Unreal Projects/c++/arrow_z/Content/assets/animation/Attack2_Montage.uasset"));
+	//Attack3Montage = LoadObject<UAnimMontage>(nullptr, TEXT("D:/Users/PARTH/Documents/Unreal Projects/c++/arrow_z/Content/assets/animation/Attack3_Montage.uasset"));
+    
+	// Bind the OnMontageEnded event
+	//OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
+	UAnimInstance* anim_slot_1 = GetMesh()->GetAnimInstance();
+	if (anim_slot_1 != nullptr)
+	{
+		anim_slot_1->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
+	}
 }
 
 void Aarrow_zCharacter::BeginPlay()
@@ -71,6 +87,21 @@ void Aarrow_zCharacter::BeginPlay()
 		}
 	}
 	//UE_LOG(LogTemp, Warning, TEXT("Hello, this is a printed message in C++!"));
+
+	/* 
+	// Bind Anim Events
+	UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
+	if (pAnimInst != nullptr)
+	{
+		pAnimInst->OnPlayMontageNotifyBegin.AddDynamic(this, &Aarrow_zCharacter::HandleOnMontageNotifyBegin);
+	}
+	*/
+	/* 
+	UAnimInstance* anim_slot_1 = GetMesh()->GetAnimInstance();
+	if (anim_slot_1 != nullptr)
+	{
+		anim_slot_1->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
+	}*/
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -319,6 +350,8 @@ void Aarrow_zCharacter::Combat(const FInputActionValue& Value)
 	*/
 	
 	//PlayComboAttack();
+	StartComboAttack();
+	//LightAttack();
 }
  /* infinite combo
 void Aarrow_zCharacter::PlayComboAttack()
@@ -381,3 +414,116 @@ void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 	PlayNextComboMontage();
 }
 */
+// combo 1
+void Aarrow_zCharacter::StartComboAttack()
+{
+	if (!bIsAttacking)
+	{
+		bIsAttacking = true;
+		HandleCombo();
+	}
+}
+
+void Aarrow_zCharacter::HandleCombo()
+{ FString ComboCountString = FString::FromInt(ComboCount);
+
+	switch (ComboCount)
+	{
+	case 0:
+		// Initial attack (play Attack1Montage)
+		PlayAnimMontage(Attack1Montage);
+		//ComboCount = 1;
+		ComboCount++;
+
+		// Convert the integer value to FString
+		
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("1st"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, ComboCount);
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, ComboCountString);
+		break;
+	case 1:
+		// Second attack (play Attack2Montage)
+		PlayAnimMontage(Attack2Montage);
+		//ComboCount = 2;
+		ComboCount++;
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("2nd"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, ComboCountString);
+		break;
+	case 2:
+		// Third attack (play Attack3Montage)
+		PlayAnimMontage(Attack3Montage);
+		ComboCount = 0; // Reset combo
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("3rd"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, ComboCountString);
+		break;
+	default:
+		// Invalid state (shouldn't happen)
+		break;
+	}
+	// Increment ComboCount after playing the animation montage
+	ComboCount = (ComboCount + 1) % 3; // Ensure ComboCount loops back to 0 after reaching 2
+}
+void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	if (bIsAttacking)
+	{
+		//bIsAttacking = false;
+		// Handle any post-attack logic here (e.g., allow next attack)
+	}
+	HandleCombo();
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("MONTAGE END"));
+}
+//--
+/* combo_2
+void Aarrow_zCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload)
+{// Decrement Combo Index
+	m_iComboAttackIndex--;
+	// Stop Montage if below zero
+	if (m_iComboAttackIndex < 0)
+	{
+		// Get Anim Instance
+		UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
+		if (pAnimInst != nullptr)
+			pAnimInst->Montage_Stop(0.4f, m_pLight_AttackMontage);
+
+	}
+}
+void Aarrow_zCharacter::LightAttack()
+{
+	// Need to not already be attacking and must be on the ground
+ //if (!IsAttacking() && CanJump())
+{
+	// Get the animation instance
+	UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
+	if (pAnimInst != nullptr)
+	{
+		// Play Light Attack
+		if (m_pLight_AttackMontage != nullptr)
+		{
+			pAnimInst->Montage_Play(m_pLight_AttackMontage);
+		
+		}
+	}
+	else
+		m_iComboAttackIndex = 1;
+}
+}
+bool Aarrow_zCharacter::IsAttacking()
+{
+	// Return true if any attack montage is playing
+	UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
+	if (pAnimInst != nullptr)
+	{
+		if (pAnimInst->Montage_IsPlaying(m_pLight_AttackMontage))
+		{
+			return true;
+			
+		}
+	}
+	return false;
+}*/
+
+
