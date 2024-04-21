@@ -44,6 +44,10 @@ class Aarrow_zCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	/** interact_action Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* Sprint_Action;
+
 	/** dash Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* DashAction;
@@ -72,6 +76,11 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
+	/** Called for looking input */
+	void Sprint(const FInputActionValue& Value);
+	/** Called for looking input */
+	void Sprint_release(const FInputActionValue& Value);
+
 	/** Called for dash input */
 	void Dash(const FInputActionValue& Value);
 
@@ -93,6 +102,13 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	//sprinting boolean
+	bool bIsSprinting = false;
+
+	// Declare SprintSpeedMultiplier as a variable in the character class
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprinting")
+	float SprintSpeedMultiplier = 2.0f; // Example value, can be adjusted as needed
 
 	// Declare dash properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
@@ -116,14 +132,18 @@ public:
 		class UAnimInstance* MyAnimInstance;
 
 		int32 CurrentMontageIndex;
+		// Declare a variable to track the number of clicks
+		int32 NumClicks = 0;
 
 		void PlayComboAttack();
-		void PlayNextComboMontage();
+		//void PlayNextComboMontage();
+		void ResetNumClicks();
+		// Function to trigger attacks
 		UFUNCTION()
 		void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 		//--
 		
-
+		/* 
 		//-combo_1
 		// Animation montage references
 
@@ -147,10 +167,11 @@ public:
 		UAnimMontage* Attack3Montage;
 
 		// Function to handle combo logic
-		void HandleCombo();
+		//void HandleCombo();
 		// Event called when an animation montage ends
 		//UFUNCTION()
 		//void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+		*/
 		//--------------------------------------------
 		
 		/* combo-2

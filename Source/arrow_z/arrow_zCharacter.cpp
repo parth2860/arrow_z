@@ -53,11 +53,14 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	//sprinting
+	//bool bIsSprinting = false;
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 	// Initialize variables
-	ComboCount = 0;
-	bIsAttacking = false;
+	//ComboCount = 0;
+	//bIsAttacking = false;
 
 	//Attack1Montage = LoadObject<UAnimMontage>(nullptr, TEXT("D:/Users/PARTH/Documents/Unreal Projects/c++/arrow_z/Content/assets/animation/Attack1_Montage.uasset"));
 	//Attack1Montage = LoadObject<UAnimMontage>(nullptr, TEXT(" /arrow_z/Content/assets/animation/Attack1_Montage.uasset"));
@@ -118,6 +121,10 @@ void Aarrow_zCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &Aarrow_zCharacter::Move);
+
+		// sprinting
+		EnhancedInputComponent->BindAction(Sprint_Action, ETriggerEvent::Started, this, &Aarrow_zCharacter::Sprint);
+		EnhancedInputComponent->BindAction(Sprint_Action, ETriggerEvent::Completed, this, &Aarrow_zCharacter::Sprint_release);
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &Aarrow_zCharacter::Look);
@@ -187,6 +194,26 @@ void Aarrow_zCharacter::PrintMessage() {
 				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Hit actor:"));
 			}
 }*/
+void Aarrow_zCharacter::Sprint(const FInputActionValue& Value)
+{
+	
+	if (!bIsSprinting)
+	{
+		bIsSprinting = true;
+		GetCharacterMovement()->MaxWalkSpeed *= SprintSpeedMultiplier;
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("Started Sprinting"));
+	}
+}
+
+void Aarrow_zCharacter::Sprint_release(const FInputActionValue& Value)
+{
+	if (bIsSprinting)
+	{
+		bIsSprinting = false;
+		GetCharacterMovement()->MaxWalkSpeed /= SprintSpeedMultiplier;
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("Stopped Sprinting"));
+	}
+}
 
 void Aarrow_zCharacter::Dash(const FInputActionValue& Value)
 {
