@@ -102,20 +102,22 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
+	
+	//-----------------------------------------------------------------------------------------
+	
 	//sprinting boolean
 	bool bIsSprinting = false;
 
 	// Declare SprintSpeedMultiplier as a variable in the character class
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprinting")
 	float SprintSpeedMultiplier = 2.0f; // Example value, can be adjusted as needed
+	
+	//-----------------------------------------------------------------------------------------
 
 	// Declare dash properties
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
-		float DashDistance;
+	
+	//-----------------------------------------------------------------------------------------
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
-		float DashCooldown;
 		/* basic anima instance to editor 
 		UPROPERTY(EditAnywhere, Category = "Animation")
 		class UAnimMontage* MyAnimationMontage;
@@ -141,8 +143,10 @@ public:
 		// Function to trigger attacks
 		UFUNCTION()
 		void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
-		//--
 		
+		
+	//-----------------------------------------------------------------------------------------
+
 		/* 
 		//-combo_1
 		// Animation montage references
@@ -172,7 +176,8 @@ public:
 		//UFUNCTION()
 		//void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 		*/
-		//--------------------------------------------
+	//-----------------------------------------------------------------------------------------
+
 		
 		/* combo-2
 		// Player Anim Montages
@@ -192,6 +197,7 @@ public:
 	UFUNCTION()
 	void HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload);
 	*/
+	//-----------------------------------------------------------------------------------------
 
 };
 

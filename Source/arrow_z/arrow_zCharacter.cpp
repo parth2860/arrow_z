@@ -53,9 +53,12 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	//--------------------------------------------------------------------------------------------------------------
+
 	//sprinting
 	//bool bIsSprinting = false;
 
+    //--------------------------------------------------------------------------------------------------------------
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 	// Initialize variables
@@ -66,7 +69,7 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 	//Attack1Montage = LoadObject<UAnimMontage>(nullptr, TEXT(" /arrow_z/Content/assets/animation/Attack1_Montage.uasset"));
 	//Attack2Montage = LoadObject<UAnimMontage>(nullptr, TEXT("D:/Users/PARTH/Documents/Unreal Projects/c++/arrow_z/Content/assets/animation/Attack2_Montage.uasset"));
 	//Attack3Montage = LoadObject<UAnimMontage>(nullptr, TEXT("D:/Users/PARTH/Documents/Unreal Projects/c++/arrow_z/Content/assets/animation/Attack3_Montage.uasset"));
-    
+	//--------------------------------------------------------------------------------------------------------------
 	// Bind the OnMontageEnded event
 	//OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
 	UAnimInstance* anim_slot_1 = GetMesh()->GetAnimInstance();
@@ -74,13 +77,15 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 	{
 		anim_slot_1->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
 	}
+	//--------------------------------------------------------------------------------------------------------------
+
 }
 
 void Aarrow_zCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
-
+	//--------------------------------------------------------------------------------------------------------------
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -90,6 +95,7 @@ void Aarrow_zCharacter::BeginPlay()
 		}
 	}
 	//UE_LOG(LogTemp, Warning, TEXT("Hello, this is a printed message in C++!"));
+	//--------------------------------------------------------------------------------------------------------------
 
 	/* 
 	// Bind Anim Events
@@ -99,12 +105,15 @@ void Aarrow_zCharacter::BeginPlay()
 		pAnimInst->OnPlayMontageNotifyBegin.AddDynamic(this, &Aarrow_zCharacter::HandleOnMontageNotifyBegin);
 	}
 	*/
+	//--------------------------------------------------------------------------------------------------------------
 	/* 
 	UAnimInstance* anim_slot_1 = GetMesh()->GetAnimInstance();
 	if (anim_slot_1 != nullptr)
 	{
 		anim_slot_1->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
 	}*/
+	//--------------------------------------------------------------------------------------------------------------
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -194,6 +203,7 @@ void Aarrow_zCharacter::PrintMessage() {
 				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Hit actor:"));
 			}
 }*/
+//--------------------------------------------------------------------------------------------------------------
 void Aarrow_zCharacter::Sprint(const FInputActionValue& Value)
 {
 	
@@ -214,61 +224,63 @@ void Aarrow_zCharacter::Sprint_release(const FInputActionValue& Value)
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("Stopped Sprinting"));
 	}
 }
+//--------------------------------------------------------------------------------------------------------------
 
 void Aarrow_zCharacter::Dash(const FInputActionValue& Value)
 {
-	//LaunchCharacter(FVector(2, 0, 1) * 1000, false, false);//only jump to fixed direction
-	/* 
-	//const FVector ForwardDir = FollowCamera->GetForwardVector();
-	const FVector ForwardDir = GetCapsuleComponent()->GetForwardVector();
-	const float plMomentum = 100.0f; // Assign a value to plMomentum (adjust as needed)
-	const float plJumpVelocity = 500.0f; // Assign a value to plJumpVelocity (adjust as needed)
-	const FVector AddForce = ForwardDir * plMomentum + FVector(2, 0, 1) * plJumpVelocity;
-
-	//if (FollowCamera->IsMovingOnGround()) {
-		//dJumped = false;
-		LaunchCharacter(AddForce, false, false);
-	//}
-	*/
-	//--------------------------------------------------------//
-	// Set default values
-	DashDistance = 1000.0f; // Adjust as needed
-	float DashForce = 1000.0f; // Adjust as needed
-	DashCooldown = 1.0f;    // Adjust as needed
-	float LastDashTime = 1.0f;
-	// Check if dash is on cooldown
-	if (GetWorld()->GetTimeSeconds() < LastDashTime + DashCooldown)
-	{
-		// Dash is still on cooldown
-		return;
-	}
-
-	// Get the forward vector of the character
+	 
+	// Get the character's forward vector
 	FVector ForwardVector = GetActorForwardVector();
-	//-------------
-	// Calculate the dash location
-	//FVector DashLocation = GetActorLocation() + ForwardVector * DashDistance;
 
-	// Move the character to the dash location
-	//SetActorLocation(DashLocation);
-	//-------------
-	// Calculate the dash impulse
-	//FVector DashImpulse = ForwardVector * DashDistance;
+	// Calculate the dash direction (forward + 500 units)
+	FVector DashDirection = ForwardVector * 2000.f;
 
-	// Apply the impulse to the character
-	//LaunchCharacter(DashImpulse, true, true);
-	//-------------
+	// Apply the dash impulse to the character
+	UCharacterMovementComponent* MovementComponent = GetCharacterMovement();
+	if (MovementComponent)
+	{
+		MovementComponent->AddImpulse(DashDirection, true);
+		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("dash"));
+	}
+	
+	//--------------------------------------------------------------------------------------------------------------
+
+	//LaunchCharacter(FVector(2, 0, 1) * 1000, false, false);//only jump to fixed direction
+	
+	//--------------------------------------------------------------------------------------------------------------
+	/* 
+	//Directional dash based on player rotation
+	FVector ForwardVector = GetActorForwardVector();
+	FVector DashDirection = ForwardVector * 2000.f;
+
+	LaunchCharacter(DashDirection, false, false);
+	
+	*/
+	//--------------------------------------------------------------------------------------------------------------
+	/* 
 	// Calculate the dash force
+	FVector ForwardVector = GetActorForwardVector() * 2000.0f;
+	// Calculate the dash force
+	float DashForce = 2000.0f; // Adjust as needed
 	FVector DashForceVector = ForwardVector * DashForce;
-
-	// Apply the force to the character
 	GetCharacterMovement()->AddForce(DashForceVector);
-	//-------------
-	// Update the last dash time
-	LastDashTime = GetWorld()->GetTimeSeconds();
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("dash"));
-	//--------------------------------------------------------//
+	*/
+	
+	//--------------------------------------------------------------------------------------------------------------
+	/* 
+	// Calculate the dash location
+	FVector ForwardVector = GetActorForwardVector();
+	float DashDistance = 2000.f;
+	FVector DashLocation = GetActorLocation() + ForwardVector * DashDistance;
+	
+	// Move the character to the dash location
+	SetActorLocation(DashLocation);
+	*/
+	
+	//--------------------------------------------------------------------------------------------------------------
+
 }
+//--------------------------------------------------------------------------------------------------------------
 void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
 {
 	
@@ -353,7 +365,7 @@ void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
 	//teleport at end location
 	//SetActorLocation(EndLocation);
 }
-//-
+//--------------------------------------------------------------------------------------------------------------
 void Aarrow_zCharacter::Combat(const FInputActionValue& Value)
 {
 	// Increment the number of clicks
@@ -415,7 +427,7 @@ void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 }
 
 
-//-
+//--------------------------------------------------------------------------------------------------------------
 /*  combo 1
 void Aarrow_zCharacter::StartComboAttack()
 {
@@ -479,6 +491,8 @@ void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("MONTAGE END"));
 }
 */
+//--------------------------------------------------------------------------------------------------------------
+
 /* combo_2
 void Aarrow_zCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload)
 {// Decrement Combo Index
