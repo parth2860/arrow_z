@@ -117,7 +117,7 @@ public:
 	// Declare dash properties
 	
 	//-----------------------------------------------------------------------------------------
-
+	//anim montages
 		/* basic anima instance to editor 
 		UPROPERTY(EditAnywhere, Category = "Animation")
 		class UAnimMontage* MyAnimationMontage;

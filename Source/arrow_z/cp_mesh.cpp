@@ -90,33 +90,23 @@ void Acp_mesh::SetRotationSpeed(float Speed, float DeltaTime)
 
 void Acp_mesh::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-    // Check if the OtherActor is a mesh (e.g., a weapon mesh)
-    if (OtherActor && OtherActor->IsA(Acp_mesh::StaticClass()))
+    //cast to charcter
+    Aarrow_zCharacter* Player = Cast<Aarrow_zCharacter>(OtherActor);
+    if (Player)
     {
-        // Cast to the mesh class (replace AMeshActor with your actual mesh class)
-        //Acp_mesh* MeshToEquip = Cast<Aarrow_zCharacter>(OtherActor);
-       // if (MeshToEquip)
-            if(OtherActor)
-        { 
-             FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, false);
-            //AttachToActor(OtherActor, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-            //SphereMesh->AttachToActor(RootComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("SocketName"));
-            //SphereMesh->AttachToActor(Aarrow_zCharacter->GetRootComponent(), AttachmentRules);
-            AttachToActor(OtherActor, AttachmentRules);
+        // Attach the weapon mesh to the player (e.g., to the hand socket)
+        //SphereMesh->AttachToComponent(Player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "secondnary_weapon");
+        // Assuming SphereMesh is your weapon mesh component
+        //GetRootComponent()->AttachToActor(Player->GetRootComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "secondnary_weapon");
+        //----------------------------------
+        // Attach the weapon to the First Person Character
+        FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+        SphereMesh->AttachToComponent(Player->GetMesh(), AttachmentRules, FName(TEXT("secondnary_weapon")));
+        //----------------------------------
 
-            if (GEngine)
-                GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("acqire"));
-        }
     }
-    /* 
-    if (OtherActor)
-    {
-        // log message for debugging
-        UE_LOG(LogTemp, Warning, TEXT("Box overlapped with actor: %s"), *OtherActor->GetName());
-        //print message in screen
-        if (GEngine)
-            GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("acqire"));
-    }*/
+    
+    
 }
 void Acp_mesh::OnBoxOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
