@@ -104,7 +104,10 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	
 	//-----------------------------------------------------------------------------------------
-	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Weapon")
+	UStaticMeshComponent* Weapon_mesh;
+	//-----------------------------------------------------------------------------------------
+
 	//sprinting boolean
 	bool bIsSprinting = false;
 

@@ -101,7 +101,8 @@ void Acp_mesh::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
         //----------------------------------
         // Attach the weapon to the First Person Character
         FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-        SphereMesh->AttachToComponent(Player->GetMesh(), AttachmentRules, FName(TEXT("secondnary_weapon")));
+        //SphereMesh->AttachToComponent(Player->GetMesh(), AttachmentRules, FName(TEXT("secondnary_weapon")));//get attach to player
+        SphereMesh->AttachToComponent(Player->Weapon_mesh, AttachmentRules, FName(TEXT("secondnary_weapon")));//get attach to player specific mesh
         //----------------------------------
 
     }

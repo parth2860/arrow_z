@@ -55,8 +55,6 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 
 	//--------------------------------------------------------------------------------------------------------------
 
-	//sprinting
-	//bool bIsSprinting = false;
 
     //--------------------------------------------------------------------------------------------------------------
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
@@ -77,6 +75,14 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 	{
 		anim_slot_1->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
 	}
+	//--------------------------------------------------------------------------------------------------------------
+	// Create and set the  static  mesh
+	Weapon_mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("secondary_Weapon_mesh"));
+	
+	//arrange order or attach 
+	//Weapon_mesh->SetupAttachment(GetMesh(), USkeletalMeshComponent::SocketName);
+	//Weapon_mesh->SetupAttachment(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "secondnary_weapon");
+	Weapon_mesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("secondnary_weapon")));//doent work as intened//attach/reorder to ue5 editor [but socket location can be set]
 	//--------------------------------------------------------------------------------------------------------------
 
 }
