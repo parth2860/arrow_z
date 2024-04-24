@@ -78,12 +78,12 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 	//--------------------------------------------------------------------------------------------------------------
 	// Create and set the  static  mesh
 	Weapon_mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("secondary_Weapon_mesh"));
-	
+
 	//arrange order or attach 
-	//Weapon_mesh->SetupAttachment(GetMesh(), USkeletalMeshComponent::SocketName);
-	//Weapon_mesh->SetupAttachment(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "secondnary_weapon");
-	Weapon_mesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("secondnary_weapon")));//doent work as intened//attach/reorder to ue5 editor [but socket location can be set]
-	//--------------------------------------------------------------------------------------------------------------
+	//Weapon_mesh->SetupAttachment(RootComponent);//set/order to rootmotion 
+	Weapon_mesh->SetupAttachment(GetMesh(), TEXT("secondnary_weapon"));//set/order mesh to skeleton mesh(but doesnot change socket to inheritated component)
+	
+	//Weapon_mesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("secondnary_weapon")));//doent work as intened//attach/reorder to ue5 editor [but parent socket location can be set]//--------------------------------------------------------------------------------------------------------------
 
 }
 
