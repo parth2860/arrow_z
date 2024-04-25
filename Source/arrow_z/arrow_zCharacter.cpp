@@ -81,8 +81,7 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 
 	//arrange order or attach 
 	//Weapon_mesh->SetupAttachment(RootComponent);//set/order to rootmotion 
-	Weapon_mesh->SetupAttachment(GetMesh(), TEXT("secondnary_weapon"));//set/order mesh to skeleton mesh(but doesnot change socket to inheritated component)
-	
+	Weapon_mesh->SetupAttachment(GetMesh(), TEXT("secondnary_weapon"));//set/order mesh to skeleton mesh(but doesnot change socket to inheritated componentWeapon_mesh->Sock(TEXT("secondnary_weapon"));//set socket location manually
 	//Weapon_mesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("secondnary_weapon")));//doent work as intened//attach/reorder to ue5 editor [but parent socket location can be set]//--------------------------------------------------------------------------------------------------------------
 
 }
@@ -209,6 +208,42 @@ void Aarrow_zCharacter::PrintMessage() {
 				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Hit actor:"));
 			}
 }*/
+//--------------------------------------------------------------------------------------------------------------
+
+//void Aarrow_zCharacter::demo(USkeletalMeshComponent* MeshComponent, UAnimInstance* demo_instance, UAnimMontage* MontageToPlay)
+void Aarrow_zCharacter::demo()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, TEXT("demo_play"));
+
+	//demo_instance = GetMesh()->GetAnimInstance();
+	//--------------------------------------------------------------------------------------------------------------
+	PlayAnimMontage(demo_anim);
+	//--------------------------------------------------------------------------------------------------------------
+	
+
+	// Bind OnMontageEnded event
+	
+	// Bind the function to the OnMontageEnded event
+	GetMesh()->GetAnimInstance()->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::OndemoEnded);
+	
+	
+	//unbinding
+	//GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &Aarrow_zCharacter::OndemoEnded);
+	//--------------------------------------------------------------------------------------------------------------
+	//OndemoEnded(demo_anim,false);//call function manually
+}
+ 
+void Aarrow_zCharacter::OndemoEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("demo_end"));
+
+	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &Aarrow_zCharacter::OndemoEnded);//if not unbinding face runtime error
+
+	
+}
+//
+
+//
 //--------------------------------------------------------------------------------------------------------------
 void Aarrow_zCharacter::Sprint(const FInputActionValue& Value)
 {
@@ -425,12 +460,13 @@ void Aarrow_zCharacter::PlayComboAttack()
 		}
 	}
 }
-
+ 
 void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	// Perform any necessary actions after the combo attack animations have ended
 	// For example, resetting the combo state, allowing for new combos, etc.
 }
+
 
 
 //--------------------------------------------------------------------------------------------------------------

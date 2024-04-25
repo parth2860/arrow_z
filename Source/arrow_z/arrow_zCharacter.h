@@ -116,6 +116,23 @@ public:
 	float SprintSpeedMultiplier = 2.0f; // Example value, can be adjusted as needed
 	
 	//-----------------------------------------------------------------------------------------
+	//demo exp
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "demo exp")
+	//TArray<class UAnimMontage*> demo_anim;
+	UAnimMontage* demo_anim;
+
+	UFUNCTION(BlueprintCallable, Category = "demo exp")
+	void demo();
+	//void demo(USkeletalMeshComponent* MeshComponent, UAnimInstance* demo_instance, UAnimMontage* MontageToPlay);
+
+	UFUNCTION()
+	void OndemoEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "demo exp")
+	//class UAnimInstance* demo_instance;
+	//--
+	
+	//-----------------------------------------------------------------------------------------
 
 	// Declare dash properties
 	
