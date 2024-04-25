@@ -217,7 +217,7 @@ void Aarrow_zCharacter::demo()
 
 	//demo_instance = GetMesh()->GetAnimInstance();
 	//--------------------------------------------------------------------------------------------------------------
-	PlayAnimMontage(demo_anim);
+	PlayAnimMontage(demo_anim);//must be these
 	//--------------------------------------------------------------------------------------------------------------
 	
 
@@ -225,8 +225,10 @@ void Aarrow_zCharacter::demo()
 	
 	// Bind the function to the OnMontageEnded event
 	GetMesh()->GetAnimInstance()->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::OndemoEnded);
-	
-	
+	//notifybegin
+	GetMesh()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &Aarrow_zCharacter::note_begin);
+	//notifyend
+	GetMesh()->GetAnimInstance()->OnPlayMontageNotifyEnd.AddDynamic(this, &Aarrow_zCharacter::note_end);
 	//unbinding
 	//GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &Aarrow_zCharacter::OndemoEnded);
 	//--------------------------------------------------------------------------------------------------------------
@@ -237,13 +239,24 @@ void Aarrow_zCharacter::OndemoEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("demo_end"));
 
-	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &Aarrow_zCharacter::OndemoEnded);//if not unbinding face runtime error
+	//unbinding
+	GetMesh()->GetAnimInstance()->OnMontageEnded.RemoveDynamic(this, &Aarrow_zCharacter::OndemoEnded);//if not unbinding face runtime error(remaining)
 
 	
 }
+//void Aarrow_zCharacter::note_begin(UAnimMontage* Montage);
+void Aarrow_zCharacter::note_begin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_begin"));
+
+}
+void Aarrow_zCharacter::note_end(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_end"));
+}
 //
 
-//
+
 //--------------------------------------------------------------------------------------------------------------
 void Aarrow_zCharacter::Sprint(const FInputActionValue& Value)
 {

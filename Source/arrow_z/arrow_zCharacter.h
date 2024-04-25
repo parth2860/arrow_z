@@ -127,6 +127,14 @@ public:
 
 	UFUNCTION()
 	void OndemoEnded(UAnimMontage* Montage, bool bInterrupted);
+	
+	UFUNCTION()
+	//void note_begin(UAnimMontage* Montage);
+	void note_begin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
+
+	UFUNCTION()
+	void note_end(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
+
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "demo exp")
 	//class UAnimInstance* demo_instance;
