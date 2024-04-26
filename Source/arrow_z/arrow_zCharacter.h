@@ -209,8 +209,8 @@ public:
 		
 		// combo-2
 		// Player Anim Montages
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-		UAnimMontage* m_pJumpMontage;
+		//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+		//UAnimMontage* m_pJumpMontage;
 
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 		UAnimMontage* m_pLight_AttackMontage;

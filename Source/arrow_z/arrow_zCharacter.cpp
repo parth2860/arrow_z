@@ -102,14 +102,7 @@ void Aarrow_zCharacter::BeginPlay()
 	//UE_LOG(LogTemp, Warning, TEXT("Hello, this is a printed message in C++!"));
 	//--------------------------------------------------------------------------------------------------------------
 
-	/* 
-	// Bind Anim Events
-	UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
-	if (pAnimInst != nullptr)
-	{
-		pAnimInst->OnPlayMontageNotifyBegin.AddDynamic(this, &Aarrow_zCharacter::HandleOnMontageNotifyBegin);
-	}
-	*/
+	
 	//--------------------------------------------------------------------------------------------------------------
 	/* 
 	UAnimInstance* anim_slot_1 = GetMesh()->GetAnimInstance();
@@ -558,29 +551,47 @@ void Aarrow_zCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const FB
 		// Get Anim Instance
 		UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
 		if (pAnimInst != nullptr)
+		{
 			pAnimInst->Montage_Stop(0.4f, m_pLight_AttackMontage);
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("play begin"));
 
+		}
 	}
 }
 void Aarrow_zCharacter::LightAttack()
 {
-	// Need to not already be attacking and must be on the ground
- //if (!IsAttacking() && CanJump())
-{
-	// Get the animation instance
+	//combo2 
+	// Bind Anim Events
 	UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
 	if (pAnimInst != nullptr)
 	{
-		// Play Light Attack
-		if (m_pLight_AttackMontage != nullptr)
+		pAnimInst->OnPlayMontageNotifyBegin.AddDynamic(this, &Aarrow_zCharacter::HandleOnMontageNotifyBegin);
+	}
+	//
+
+	// Need to not already be attacking and must be on the ground
+    //if (!IsAttacking() && CanJump())
+	if (!IsAttacking())
+	{
+		// Get the animation instance
+		//UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
+		if (pAnimInst != nullptr)
 		{
-			pAnimInst->Montage_Play(m_pLight_AttackMontage);
-		
+			// Play Light Attack
+			if (m_pLight_AttackMontage != nullptr)
+			{
+				pAnimInst->Montage_Play(m_pLight_AttackMontage);
+
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("light attack"));
+			}
 		}
 	}
 	else
+	{
 		m_iComboAttackIndex = 1;
-}
+	}
+
+
 }
 bool Aarrow_zCharacter::IsAttacking()
 {
@@ -591,9 +602,11 @@ bool Aarrow_zCharacter::IsAttacking()
 		if (pAnimInst->Montage_IsPlaying(m_pLight_AttackMontage))
 		{
 			return true;
-			
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("is attacking"));
+		
 		}
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("not attacking"));
 	return false;
 }//
 
