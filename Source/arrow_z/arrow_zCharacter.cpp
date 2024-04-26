@@ -548,7 +548,7 @@ void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 */
 //--------------------------------------------------------------------------------------------------------------
 
-/* combo_2
+// combo_2
 void Aarrow_zCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload)
 {// Decrement Combo Index
 	m_iComboAttackIndex--;
@@ -595,6 +595,6 @@ bool Aarrow_zCharacter::IsAttacking()
 		}
 	}
 	return false;
-}*/
+}//
 
 

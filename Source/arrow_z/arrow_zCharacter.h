@@ -207,7 +207,7 @@ public:
 	//-----------------------------------------------------------------------------------------
 
 		
-		/* combo-2
+		// combo-2
 		// Player Anim Montages
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 		UAnimMontage* m_pJumpMontage;
@@ -215,6 +215,7 @@ public:
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 		UAnimMontage* m_pLight_AttackMontage;
 
+		UFUNCTION(BlueprintCallable)
 		// Method for handling light attacks
 		void LightAttack();
 		// Method for getting whether player is attacking
@@ -224,7 +225,7 @@ public:
 	// Event handler for montage notify begin
 	UFUNCTION()
 	void HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload);
-	*/
+	//
 	//-----------------------------------------------------------------------------------------
 
 };
