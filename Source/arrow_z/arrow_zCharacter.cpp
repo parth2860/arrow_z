@@ -465,6 +465,7 @@ void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 		 break;
 	 case 2:
 		 PlayAnimMontage(slot3);
+		 combat_reset();//reset combo ,infinite combo ,use notify end,begin
 		 break;
 	 //default:
 		 //break;
@@ -477,6 +478,10 @@ void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 	 combat_handle();
 
 	 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("combo switch"));
+ }
+ void Aarrow_zCharacter::combat_reset()
+ {
+	 combo_count = 0;
  }
 //--------------------------------------------------------------------------------------------------------------
 

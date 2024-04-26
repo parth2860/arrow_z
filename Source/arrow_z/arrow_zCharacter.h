@@ -185,9 +185,8 @@ public:
 		int combo_count= 0;
 		UFUNCTION(BlueprintCallable, Category = "combo_1")
 		void combat();
-
-		UFUNCTION()
 		void combat_handle();
+		void combat_reset();
 
 		UFUNCTION()
 		void combat_switcher(UAnimMontage* Montage, bool bInterrupted);
