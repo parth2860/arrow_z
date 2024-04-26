@@ -145,7 +145,7 @@ public:
 	// Declare dash properties
 	
 	//-----------------------------------------------------------------------------------------
-	//anim montages
+	//combo_0
 		/* basic anima instance to editor 
 		UPROPERTY(EditAnywhere, Category = "Animation")
 		class UAnimMontage* MyAnimationMontage;
@@ -174,40 +174,12 @@ public:
 		
 		
 	//-----------------------------------------------------------------------------------------
-
-		/* 
-		//-combo_1
-		// Animation montage references
-
-		// Combo - related variables
-		int32 ComboCount;
-		// Declare a variable to track the number of clicks
-		int32 NumClicks = 0;
-		bool bIsAttacking;
-
-		void ResetNumClicks();
-		// Function to trigger attacks
-		void StartComboAttack();
-
-		UPROPERTY(EditDefaultsOnly, Category = "Combat")
-		UAnimMontage* Attack1Montage;
-
-		UPROPERTY(EditDefaultsOnly, Category = "Combat")
-		UAnimMontage* Attack2Montage;
-
-		UPROPERTY(EditDefaultsOnly, Category = "Combat")
-		UAnimMontage* Attack3Montage;
-
-		// Function to handle combo logic
-		//void HandleCombo();
-		// Event called when an animation montage ends
-		//UFUNCTION()
-		//void OnMontageEnded(UAnimMontage* Montage, bool bInterrupted);
-		*/
+	//combo_1
+		
 	//-----------------------------------------------------------------------------------------
 
 		
-		// combo-2
+		/* combo - 2
 		// Player Anim Montages
 		//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 		//UAnimMontage* m_pJumpMontage;
@@ -225,7 +197,7 @@ public:
 	// Event handler for montage notify begin
 	UFUNCTION()
 	void HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload);
-	//
+	*/
 	//-----------------------------------------------------------------------------------------
 
 };
