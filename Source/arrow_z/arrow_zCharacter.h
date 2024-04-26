@@ -155,7 +155,7 @@ public:
 		*/
 
 		// infinete anima play 
-		UPROPERTY(EditAnywhere, Category = "Animation")
+		UPROPERTY(EditAnywhere, Category = "combo_0")
 		TArray<class UAnimMontage*> ComboAttackMontages;
 
 		UPROPERTY()
@@ -175,16 +175,31 @@ public:
 		
 	//-----------------------------------------------------------------------------------------
 	//combo_1
+		UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "combo_1")
+		UAnimMontage* slot1;
+		UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "combo_1")
+		UAnimMontage* slot2;
+		UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "combo_1")
+		UAnimMontage* slot3;
 		
+		int combo_count= 0;
+		UFUNCTION(BlueprintCallable, Category = "combo_1")
+		void combat();
+
+		UFUNCTION()
+		void combat_handle();
+
+		UFUNCTION()
+		void combat_switcher(UAnimMontage* Montage, bool bInterrupted);
 	//-----------------------------------------------------------------------------------------
 
 		
 		/* combo - 2
 		// Player Anim Montages
-		//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+		//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "combo_2")
 		//UAnimMontage* m_pJumpMontage;
 
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "combo_2")
 		UAnimMontage* m_pLight_AttackMontage;
 
 		UFUNCTION(BlueprintCallable)

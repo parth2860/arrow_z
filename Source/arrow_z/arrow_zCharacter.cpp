@@ -447,6 +447,37 @@ void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 
 //--------------------------------------------------------------------------------------------------------------
 //combo_1
+ void Aarrow_zCharacter::combat()
+{
+	 //combo_count = 0;
+	 PlayAnimMontage(slot1);
+	 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("combo play"));
+
+	 // Bind the function to the OnMontageEnded event
+	 GetMesh()->GetAnimInstance()->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::combat_switcher);
+}
+ void Aarrow_zCharacter::combat_handle()
+ {
+	 switch(combo_count)
+	 { 
+	 case 1:
+		 PlayAnimMontage(slot2);
+		 break;
+	 case 2:
+		 PlayAnimMontage(slot3);
+		 break;
+	 //default:
+		 //break;
+	 }
+	 
+ }
+ void Aarrow_zCharacter::combat_switcher(UAnimMontage* Montage, bool bInterrupted)
+ {
+	 combo_count++;
+	 combat_handle();
+
+	 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("combo switch"));
+ }
 //--------------------------------------------------------------------------------------------------------------
 
 /* combo_2
