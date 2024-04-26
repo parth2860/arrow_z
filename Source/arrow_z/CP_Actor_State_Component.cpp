@@ -11,6 +11,12 @@ UCP_Actor_State_Component::UCP_Actor_State_Component()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
+	//--------------------------------------------------------------------------
+	// Set default values
+	Health = MaxHealth = 100.0f;
+	Stamina = MaxStamina = 100.0f;
+	CurrentLevel = 1;
+	MaxLevel = 10;
 }
 
 
@@ -30,5 +36,33 @@ void UCP_Actor_State_Component::TickComponent(float DeltaTime, ELevelTick TickTy
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+//--------------------------------------------------------------------------
+void UCP_Actor_State_Component::IncreaseHealth(float Amount)
+{
+	Health = FMath::Clamp(Health + Amount, 0.0f, MaxHealth);
+}
+
+void UCP_Actor_State_Component::DecreaseHealth(float Amount)
+{
+	Health = FMath::Clamp(Health - Amount, 0.0f, MaxHealth);
+}
+
+void UCP_Actor_State_Component::IncreaseStamina(float Amount)
+{
+	Stamina = FMath::Clamp(Stamina + Amount, 0.0f, MaxStamina);
+}
+
+void UCP_Actor_State_Component::DecreaseStamina(float Amount)
+{
+	Stamina = FMath::Clamp(Stamina - Amount, 0.0f, MaxStamina);
+}
+
+void UCP_Actor_State_Component::LevelUp()
+{
+	if (CurrentLevel < MaxLevel)
+	{
+		CurrentLevel++;
+	}
 }
 
