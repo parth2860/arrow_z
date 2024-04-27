@@ -17,7 +17,7 @@ Acp_mesh::Acp_mesh()
     CubeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube Mesh"));
 
     // Load the Cube mesh (you can replace this with your own cube mesh asset)
-    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshAsset(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshAsset(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'"));//it worked,,by deafault path for engine assets
     if (CubeMeshAsset.Succeeded())
     {
         CubeMesh->SetStaticMesh(CubeMeshAsset.Object);
@@ -31,8 +31,13 @@ Acp_mesh::Acp_mesh()
     SphereMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SphereMesh_1"));
     RootComponent = SphereMesh;
 
-    // Load a static mesh (e.g., a sphere)
-    static ConstructorHelpers::FObjectFinder<UStaticMesh> SphereMeshAsset(TEXT("StaticMesh'/Game/Path/To/Your/SphereMesh.SphereMesh'"));
+    //----------------------------------------------------------------------------------------------
+    // loading option
+    //static ConstructorHelpers::FObjectFinder<UStaticMesh> sbMesh(TEXT("Material'/Game/Materials/skyboxes/mat_skybox_backdrop02.mat_skybox_backdrop02'"));
+    //static ConstructorHelpers::FObjectFinder<UMaterial> sbMaterial(TEXT("Material'/Game/Materials/skyboxes/mat_skybox_backdrop02.mat_skybox_backdrop02'"));
+    //----------------------------------------------------------------------------------------------
+    // Load a static mesh (e.g., a sphere)//arrow_z/Content/assets/3d_mesh/Sword.uasset
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> SphereMeshAsset(TEXT("StaticMesh'/Game/assets/3d_mesh/Sword.Sword'"));//remove content folder for custom access
     if (SphereMeshAsset.Succeeded())
     {
         SphereMesh->SetStaticMesh(SphereMeshAsset.Object);
