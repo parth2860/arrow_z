@@ -210,6 +210,34 @@ void Aarrow_zCharacter::OndemoEnded(UAnimMontage* Montage, bool bInterrupted)
 void Aarrow_zCharacter::note_begin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_begin"));
+	/*trace_notify
+	if (demo_anim)
+	{
+		 const auto NotifyEvents = demo_anim->trace_notify;
+		 //const auto NotifyEvents:TArray<FAnimNotifyEvent> = demo_anim->trace_notify;
+		for (FAnimNotifyEvent EventNotify : NotifyEvents)
+		{
+			if (const auto trace_notify = Cast<UMyAnimNotifyState_Trace>(EventNotify.trace_notify))
+			{
+				trace_notify->OnNotified.AddUObject(this, &Aarrow_zCharacter::note_end);
+			}
+		}
+	}
+	*/
+	/*custom notify
+	if (demo_anim)
+	{
+		const auto NotifyEvents = demo_anim->Notifies;
+		//const auto NotifyEvents:TArray<FAnimNotifyEvent> = demo_anim->Notifies;
+		for (FAnimNotifyEvent EventNotify : NotifyEvents)
+		{
+			if (const auto DanceNotify = Cast<UMyAnimNotifyState_Trace>(EventNotify.Notify))
+			{
+				DanceNotify->OnNotified.AddUObject(this, &Aarrow_zCharacter::note_end);
+			}
+		}
+	}
+	*/
 
 }
 void Aarrow_zCharacter::note_end(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
