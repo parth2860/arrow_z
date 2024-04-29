@@ -45,7 +45,7 @@ Acp_mesh::Acp_mesh()
     //-----------------------------------------------------------------------------------------
     // Create the Box Collision Component
     BoxCollisionarea = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollisionarea"));
-    BoxCollisionarea->SetBoxExtent(FVector(100.f, 100.f, 100.f)); // Set the box dimensions
+    BoxCollisionarea->SetBoxExtent(FVector(20.f, 20.f, 100.f)); // Set the box dimensions
     BoxCollisionarea->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); // Set collision type (query and physics)
     BoxCollisionarea->SetCollisionObjectType(ECollisionChannel::ECC_Pawn); // Set your desired collision channel
     BoxCollisionarea->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
@@ -106,8 +106,10 @@ void Acp_mesh::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
         //----------------------------------
         // Attach the weapon to the First Person Character
         FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-        //SphereMesh->AttachToComponent(Player->GetMesh(), AttachmentRules, FName(TEXT("secondnary_weapon")));//get attach to player
+        //SphereMesh->AttachToComponent(Player->GetMesh(), AttachmentRules, FName(TEXT("secondnary_weapon")));//get attach to player//collision also attached
         SphereMesh->AttachToComponent(Player->Weapon_mesh, AttachmentRules, FName(TEXT("secondnary_weapon")));//get attach to player specific mesh
+        //SphereMesh->AttachToActor(Player->Weapon_mesh, AttachmentRules, FName(TEXT("secondnary_weapon")));
+        // 
         //----------------------------------
 
     }

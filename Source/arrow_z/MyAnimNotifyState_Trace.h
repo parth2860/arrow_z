@@ -23,7 +23,7 @@ public:
 	FOnNotifiedSignature OnNotified;
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference); //override;
 	virtual void trace_notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference);
-	//
+	//notify begin,end//worked
 	UPROPERTY()
 	Aarrow_zCharacter* c_player;
 

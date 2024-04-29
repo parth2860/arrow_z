@@ -13,6 +13,8 @@
 #include "DrawDebugHelpers.h" // Include for visual debugging
 #include "cp_interect.h"//spawned actor
 #include "LightSwitchBoth.h"//spawned actor
+#include "Components/SkeletalMeshComponent.h"
+
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -61,8 +63,58 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 	//arrange order or attach 
 	//Weapon_mesh->SetupAttachment(RootComponent);//set/order to rootmotion 
 	Weapon_mesh->SetupAttachment(GetMesh(), TEXT("secondnary_weapon"));//set/order mesh to skeleton mesh(but doesnot change socket to inheritated componentWeapon_mesh->Sock(TEXT("secondnary_weapon"));//set socket location manually
-	//Weapon_mesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("secondnary_weapon")));//doent work as intened//attach/reorder to ue5 editor [but parent socket location can be set]//--------------------------------------------------------------------------------------------------------------
+	//Weapon_mesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("secondnary_weapon")));//doent work as intened//attach/reorder to ue5 editor [but parent socket location can not be set]//--------------------------------------------------------------------------------------------------------------
+	//
+	
+	//--------------------------------------------------------------------------------------------------------------
 
+	/* get skeleton mesh name
+	USkeletalMeshComponent* PlayerMesh = GetMesh();
+	if (PlayerMesh)
+	{
+		// Get the name of the skeletal mesh component
+		FString PlayerMeshName = PlayerMesh->GetName();
+
+		// Output the name to the log for debugging purposes
+		UE_LOG(LogTemp, Warning, TEXT("Player Mesh Name: %s"), *PlayerMeshName);
+		
+	}
+	*/
+	USkeletalMeshComponent* PlayerMesh = GetMesh();
+	if (PlayerMesh)
+	{
+		FString PlayerMeshName = PlayerMesh->GetName();
+		// Output the name to the log for debugging purposes
+		UE_LOG(LogTemp, Warning, TEXT("Player Mesh Name: %s"), *PlayerMeshName);
+
+		// Get the number of attached children components
+		int32 NumChildren = PlayerMesh->GetNumChildrenComponents();
+
+		// Loop through all attached children components
+		for (int32 ChildIndex = 0; ChildIndex < NumChildren; ++ChildIndex)
+		{
+			// Get the child component at the specified index
+			USceneComponent* AttachedComponent = PlayerMesh->GetChildComponent(ChildIndex);
+
+			// Check if the attached component is a skeletal mesh component
+			USkeletalMeshComponent* AttachedSkeletalMesh = Cast<USkeletalMeshComponent>(AttachedComponent);
+			if (AttachedSkeletalMesh)
+			{
+				// Get the name of the attached skeletal mesh component
+				FString AttachedMeshName = AttachedSkeletalMesh->GetName();
+
+				// Output the name to the log for debugging purposes
+				UE_LOG(LogTemp, Warning, TEXT("Attached Mesh Name: %s"), *AttachedMeshName);
+			}
+		}
+	}
+
+
+
+
+
+
+	//
 }
 
 void Aarrow_zCharacter::BeginPlay()
@@ -80,7 +132,17 @@ void Aarrow_zCharacter::BeginPlay()
 	}
 	//UE_LOG(LogTemp, Warning, TEXT("Hello, this is a printed message in C++!"));
 	//--------------------------------------------------------------------------------------------------------------
+	
+	/* Get the socket names
+	const TArray<FName>& SocketNames = GetMesh()->GetAllSocketNames();
 
+	// Iterate through the socket names
+	for (const FName& SocketName : SocketNames)
+	{
+		// Print or use the socket name
+		UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *SocketName.ToString());
+	}
+	*/
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -238,6 +300,34 @@ void Aarrow_zCharacter::note_begin(FName NotifyName, const FBranchingPointNotify
 		}
 	}
 	*/
+	//--------------------------------------------------------------------------------------------------------------
+	// Get the world location and rotation of the socket points
+	/*
+    GetMesh()->
+	FVector TraceStart = SwordMeshComponent->GetSocketLocation(TEXT("traceStart"));
+	FVector TraceEnd = SwordMeshComponent->GetSocketLocation(TEXT("traceEnd"));
+
+	// Perform a line trace between traceStart and traceEnd
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this); // Ignore the sword itself for the trace
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams);
+
+	// Draw debug line for visualization
+	if (bHit)
+	{
+		DrawDebugLine(GetWorld(), TraceStart, HitResult.Location, FColor::Red, false, 1.0f, 0, 1.0f);
+		// Handle the hit result
+		// Example: You can apply damage to the hit actor, play effects, etc.
+	}
+	else
+	{
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Green, false, 1.0f, 0, 1.0f);
+	}
+	*/
+	//--------------------------------------------------------------------------------------------------------------
+
 
 }
 void Aarrow_zCharacter::note_end(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
