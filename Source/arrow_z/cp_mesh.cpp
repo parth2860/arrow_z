@@ -46,10 +46,14 @@ Acp_mesh::Acp_mesh()
     // Create the Box Collision Component
     BoxCollisionarea = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollisionarea"));
     BoxCollisionarea->SetBoxExtent(FVector(20.f, 20.f, 100.f)); // Set the box dimensions
-    BoxCollisionarea->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); // Set collision type (query and physics)
-    BoxCollisionarea->SetCollisionObjectType(ECollisionChannel::ECC_Pawn); // Set your desired collision channel
+    //BoxCollisionarea->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); // Set collision type (query and physics)
+    //BoxCollisionarea->SetCollisionObjectType(ECollisionChannel::ECC_Pawn); // Set your desired collision channel
     BoxCollisionarea->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
+    //additional collision query
+    //SphereMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    //SphereMesh->SetCollisionResponseToAllChannels(ECollisionResponse::Ignore);
+    //SphereMesh->SetCollisionResponseToChannel(ECC_Pawn, ECollisionResponse::Overlap);
+    // 
     // Bind the overlap function to the OnComponentBeginOverlap event
     BoxCollisionarea->OnComponentBeginOverlap.AddDynamic(this, &Acp_mesh::OnBoxOverlap);
     BoxCollisionarea->OnComponentEndOverlap.AddDynamic(this, &Acp_mesh::OnBoxOverlapEnd);
@@ -109,8 +113,13 @@ void Acp_mesh::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
         //SphereMesh->AttachToComponent(Player->GetMesh(), AttachmentRules, FName(TEXT("secondnary_weapon")));//get attach to player//collision also attached
         SphereMesh->AttachToComponent(Player->Weapon_mesh, AttachmentRules, FName(TEXT("secondnary_weapon")));//get attach to player specific mesh
         //SphereMesh->AttachToActor(Player->Weapon_mesh, AttachmentRules, FName(TEXT("secondnary_weapon")));
-        // 
+        // Ensure collision is disabled after attachment to prevent obstruction
+        SphereMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);//remove collision
         //----------------------------------
+        //GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("equiped"));//event after attach its keeps printing
+
+        // Unregister from the Overlap Event so it is no longer triggered
+        //.RemoveAll(this);
 
     }
     
