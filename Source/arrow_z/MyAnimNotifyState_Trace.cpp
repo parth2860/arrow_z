@@ -27,7 +27,7 @@ void UMyAnimNotifyState_Trace::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 			c_player = Cast<Aarrow_zCharacter>(MeshComp->GetOwner());
 			if (c_player)
 			{
-				//c_player->ActivateRightWeapon();
+				c_player->trace_hit();
 				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_begin_state"));
 
 			}

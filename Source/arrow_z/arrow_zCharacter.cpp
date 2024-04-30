@@ -13,7 +13,9 @@
 #include "DrawDebugHelpers.h" // Include for visual debugging
 #include "cp_interect.h"//spawned actor
 #include "LightSwitchBoth.h"//spawned actor
-#include "Components/SkeletalMeshComponent.h"
+#include "Components/SkeletalMeshComponent.h"//get access skeleton mesh
+#include "Runtime/Engine/Classes/Engine/StaticMeshSocket.h"//to get socket name from ue5 editor
+#include "Components/StaticMeshComponent.h"//to get staticmesh component
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -80,6 +82,7 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 		
 	}
 	*/
+	/* 
 	USkeletalMeshComponent* PlayerMesh = GetMesh();
 	if (PlayerMesh)
 	{
@@ -108,12 +111,11 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 			}
 		}
 	}
-
-
-
-
-
-
+	*/
+	//
+	
+	//
+	
 	//
 }
 
@@ -143,6 +145,8 @@ void Aarrow_zCharacter::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *SocketName.ToString());
 	}
 	*/
+	//
+	
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -301,11 +305,13 @@ void Aarrow_zCharacter::note_begin(FName NotifyName, const FBranchingPointNotify
 	}
 	*/
 	//--------------------------------------------------------------------------------------------------------------
-	// Get the world location and rotation of the socket points
-	/*
-    GetMesh()->
-	FVector TraceStart = SwordMeshComponent->GetSocketLocation(TEXT("traceStart"));
-	FVector TraceEnd = SwordMeshComponent->GetSocketLocation(TEXT("traceEnd"));
+	
+}
+void Aarrow_zCharacter::trace_hit()
+{
+	//
+	FVector TraceStart = Weapon_mesh->GetSocketLocation(TEXT("start_trace"));
+	FVector TraceEnd = Weapon_mesh->GetSocketLocation(TEXT("end_trace"));
 
 	// Perform a line trace between traceStart and traceEnd
 	FHitResult HitResult;
@@ -317,19 +323,27 @@ void Aarrow_zCharacter::note_begin(FName NotifyName, const FBranchingPointNotify
 	// Draw debug line for visualization
 	if (bHit)
 	{
-		DrawDebugLine(GetWorld(), TraceStart, HitResult.Location, FColor::Red, false, 1.0f, 0, 1.0f);
+		DrawDebugLine(GetWorld(), TraceStart, HitResult.Location, FColor::Red, false, 1.0f, 0, 5.0f);
 		// Handle the hit result
 		// Example: You can apply damage to the hit actor, play effects, etc.
+		UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *TraceStart.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *TraceEnd.ToString());
+
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, TEXT("Socket Name: %s"), *TraceStart.ToString());
+
 	}
 	else
 	{
-		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Green, false, 1.0f, 0, 1.0f);
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Green, false, 1.0f, 0, 5.0f);
+		UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *TraceStart.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *TraceEnd.ToString());
+
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, TEXT("Socket Name: %s"), *TraceStart.ToString());
+
 	}
-	*/
-	//--------------------------------------------------------------------------------------------------------------
-
-
+	//
 }
+
 void Aarrow_zCharacter::note_end(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_end"));

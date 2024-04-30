@@ -134,7 +134,9 @@ public:
 
 	UFUNCTION()
 	void note_end(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
-
+	
+	UFUNCTION(BlueprintCallable)
+	void trace_hit();
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "demo exp")
 	//class UAnimInstance* demo_instance;
