@@ -309,40 +309,8 @@ void Aarrow_zCharacter::note_begin(FName NotifyName, const FBranchingPointNotify
 }
 void Aarrow_zCharacter::trace_hit()
 {
-	/* 
-	FVector TraceStart = Weapon_mesh->GetSocketLocation(TEXT("start_trace"));
-	FVector TraceEnd = Weapon_mesh->GetSocketLocation(TEXT("end_trace"));
-
-	// Perform a line trace between traceStart and traceEnd
-	FHitResult HitResult;
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.AddIgnoredActor(this); // Ignore the sword itself for the trace
-
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams);
-
-	// Draw debug line for visualization
-	if (bHit)
-	{
-		DrawDebugLine(GetWorld(), TraceStart, HitResult.Location, FColor::Red, false, 1.0f, 0, 5.0f);
-		// Handle the hit result
-		// Example: You can apply damage to the hit actor, play effects, etc.
-		UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *TraceStart.ToString());
-		UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *TraceEnd.ToString());
-
-		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, TEXT("Socket Name: %s"), *TraceStart.ToString());
-
-	}
-	else
-	{
-		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Green, false, 1.0f, 0, 5.0f);
-		UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *TraceStart.ToString());
-		UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *TraceEnd.ToString());
-
-		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, TEXT("Socket Name: %s"), *TraceStart.ToString());
-
-	}
-	*/
-	/* 
+	
+	/* get actor,attched actor,socket anme
 	if (USkeletalMeshComponent* SkeletalMeshComponent = GetMesh())
 	{
 		// Get all attached children components
@@ -374,39 +342,8 @@ void Aarrow_zCharacter::trace_hit()
 		}
 	}
 	*/
-	/* 
-	if (USkeletalMeshComponent* SkeletalMeshComponent = GetMesh())
-	{
-		// Get all attached children components
-		const TArray<USceneComponent*>& AttachedComponents = SkeletalMeshComponent->GetAttachChildren();
-
-		// Iterate through the attached components
-		for (USceneComponent* AttachedComponent : AttachedComponents)
-		{
-			// Check if the attached component is a static mesh component
-			if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(AttachedComponent))
-			{
-				// Print the name of the attached static mesh component (socket)
-				UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
-
-				// If the attached component is named "sword_mesh", get its socket names and locations
-				if (StaticMeshComponent->GetName() == "sword_mesh")
-				{   
-					// Get the locations of the "start_trace" and "end_trace" sockets
-					FVector StartTraceLocation = StaticMeshComponent->GetSocketLocation(TEXT("start_trace"));
-					FVector EndTraceLocation = StaticMeshComponent->GetSocketLocation(TEXT("end_trace"));
-
-					// Print the locations of both sockets
-					UE_LOG(LogTemp, Warning, TEXT("Start Trace Location: %s"), *StartTraceLocation.ToString());
-					UE_LOG(LogTemp, Warning, TEXT("End Trace Location: %s"), *EndTraceLocation.ToString());
-					
-					
-				}
-			}
-		}
-	}
-	*/
-	//
+	
+	//get actor,attched actor,socket anme + line trace
 	if (USkeletalMeshComponent* SkeletalMeshComponent = GetMesh())
 	{
 		// Get all attached children components
@@ -428,11 +365,19 @@ void Aarrow_zCharacter::trace_hit()
 					FVector StartTraceLocation = StaticMeshComponent->GetSocketLocation(TEXT("start_trace"));
 					FVector EndTraceLocation = StaticMeshComponent->GetSocketLocation(TEXT("end_trace"));
 
+					//print socket location
+					//UE_LOG(LogTemp, Warning, TEXT("Start Trace Location: %s"), *StartTraceLocation.ToString());
+					//UE_LOG(LogTemp, Warning, TEXT("Start Trace Location: %s"), *EndTraceLocation.ToString());
+
 					// Perform line trace from start to end trace
 					FHitResult HitResult;
 					FCollisionQueryParams Params;
 					Params.AddIgnoredActor(GetOwner()); // Ignore the owner actor in the line trace
+					Params.bTraceComplex = true;
+					//Params.bTraceAsyncScene = true;
+					Params.bReturnPhysicalMaterial = false;
 
+					//GetWorld()->LineTraceSingleByChannel(HitResult, StartTraceLocation, EndTraceLocation, ECollisionChannel::ECC_Visibility, Params);
 					// Perform the line trace
 					bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartTraceLocation, EndTraceLocation, ECollisionChannel::ECC_Visibility, Params);
 
@@ -441,48 +386,19 @@ void Aarrow_zCharacter::trace_hit()
 					{
 						// Handle the hit result (you can print debug information or perform other actions here)
 						UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *HitResult.GetActor()->GetName());
+						DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, 0, 1.0f);
 					}
 					else
 					{
 						// No hit, print debug information
 						UE_LOG(LogTemp, Warning, TEXT("Line trace did not hit anything."));
+						DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Green, false, 5.0f, 0, 1.0f);
 					}
+					//
 				}
 			}
 		}
 	}
-
-	/*
-	//line trace
-	FVector TraceStart = Weapon_mesh->GetSocketLocation(TEXT("start_trace"));
-	FVector TraceEnd = Weapon_mesh->GetSocketLocation(TEXT("end_trace"));
-
-	// Perform line trace from TraceStart to TraceEnd
-	FHitResult HitResult;
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.bTraceComplex = true;
-
-	if (GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams))
-	{
-		// Line trace hit something
-		AActor* HitActor = HitResult.GetActor();
-		if (HitActor)
-		{
-			// Handle hit actor
-			UE_LOG(LogTemp, Warning, TEXT("Line trace hit actor: %s"), *HitActor->GetName());
-		}
-
-		// Draw debug line
-		DrawDebugLine(GetWorld(), TraceStart, HitResult.Location, FColor::Red, false, 1.0f, 0, 5.0f);
-	}
-	else
-	{
-		// Line trace didn't hit anything
-		UE_LOG(LogTemp, Warning, TEXT("Line trace didn't hit anything."));
-		// Draw debug line without hit result
-		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1.0f, 0, 5.0f);
-	}
-	*/
 
 }
 
