@@ -70,52 +70,6 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 	
 	//--------------------------------------------------------------------------------------------------------------
 
-	/* get skeleton mesh name
-	USkeletalMeshComponent* PlayerMesh = GetMesh();
-	if (PlayerMesh)
-	{
-		// Get the name of the skeletal mesh component
-		FString PlayerMeshName = PlayerMesh->GetName();
-
-		// Output the name to the log for debugging purposes
-		UE_LOG(LogTemp, Warning, TEXT("Player Mesh Name: %s"), *PlayerMeshName);
-		
-	}
-	*/
-	/* 
-	USkeletalMeshComponent* PlayerMesh = GetMesh();
-	if (PlayerMesh)
-	{
-		FString PlayerMeshName = PlayerMesh->GetName();
-		// Output the name to the log for debugging purposes
-		UE_LOG(LogTemp, Warning, TEXT("Player Mesh Name: %s"), *PlayerMeshName);
-
-		// Get the number of attached children components
-		int32 NumChildren = PlayerMesh->GetNumChildrenComponents();
-
-		// Loop through all attached children components
-		for (int32 ChildIndex = 0; ChildIndex < NumChildren; ++ChildIndex)
-		{
-			// Get the child component at the specified index
-			USceneComponent* AttachedComponent = PlayerMesh->GetChildComponent(ChildIndex);
-
-			// Check if the attached component is a skeletal mesh component
-			USkeletalMeshComponent* AttachedSkeletalMesh = Cast<USkeletalMeshComponent>(AttachedComponent);
-			if (AttachedSkeletalMesh)
-			{
-				// Get the name of the attached skeletal mesh component
-				FString AttachedMeshName = AttachedSkeletalMesh->GetName();
-
-				// Output the name to the log for debugging purposes
-				UE_LOG(LogTemp, Warning, TEXT("Attached Mesh Name: %s"), *AttachedMeshName);
-			}
-		}
-	}
-	*/
-	//
-	
-	//
-	
 	//
 }
 
@@ -373,7 +327,7 @@ void Aarrow_zCharacter::trace_hit()
 					FHitResult HitResult;
 					FCollisionQueryParams Params;
 					Params.AddIgnoredActor(GetOwner()); // Ignore the owner actor in the line trace
-					Params.bTraceComplex = true;
+					Params.bTraceComplex = false;
 					//Params.bTraceAsyncScene = true;
 					Params.bReturnPhysicalMaterial = false;
 
@@ -385,8 +339,20 @@ void Aarrow_zCharacter::trace_hit()
 					if (bHit)
 					{
 						// Handle the hit result (you can print debug information or perform other actions here)
-						UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *HitResult.GetActor()->GetName());
+						//UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *HitResult.GetActor()->GetName());
 						DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, 0, 1.0f);
+						// Access additional hit result data if needed
+						/*
+						UPhysicalMaterial* PhysMaterial = HitResult.PhysMaterial.Get();
+						if (PhysMaterial)
+						{
+							// Print the physical material's name
+							UE_LOG(LogTemp, Warning, TEXT("Hit physical material: %s"), *PhysMaterial->GetName());
+							// Handle the hit result (you can print debug information or perform other actions here)
+							UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *HitResult.GetActor()->GetName());
+							DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Orange, false, 5.0f, 0, 1.0f);
+						}
+						*/
 					}
 					else
 					{
