@@ -26,9 +26,12 @@ public:
 	//notify begin,end//worked
 	UPROPERTY()
 	Aarrow_zCharacter* c_player;
-
+	//that work only begining and ending of state
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference) override;
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
+	
+	virtual void StartTracing(USkeletalMeshComponent* MeshComp);
+	virtual void StopTracing(USkeletalMeshComponent* MeshComp);
 	//
 
 };

@@ -102,6 +102,10 @@ void Aarrow_zCharacter::BeginPlay()
 	//
 	
 }
+void Aarrow_zCharacter::Tick(float DeltaTime)
+{
+	//trace_hit();
+}
 
 //////////////////////////////////////////////////////////////////////////
 // Input

@@ -96,6 +96,8 @@ protected:
 	
 	// To add mapping context
 	virtual void BeginPlay();
+	// event tick
+	virtual void Tick(float DeltaTime) override;
 
 public:
 	/** Returns CameraBoom subobject **/

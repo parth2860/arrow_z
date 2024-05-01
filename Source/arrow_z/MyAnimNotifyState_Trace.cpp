@@ -46,3 +46,11 @@ void UMyAnimNotifyState_Trace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnim
 		}
 	}
 }
+void UMyAnimNotifyState_Trace::StartTracing(USkeletalMeshComponent* MeshComp)
+{
+
+
+}
+void UMyAnimNotifyState_Trace::StopTracing(USkeletalMeshComponent* MeshComp)
+{
+}
