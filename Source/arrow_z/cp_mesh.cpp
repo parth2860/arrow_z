@@ -120,7 +120,7 @@ void Acp_mesh::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 
         // Unregister from the Overlap Event so it is no longer triggered
         //.RemoveAll(this);
-
+        second_trace();
     }
     
     
@@ -128,4 +128,45 @@ void Acp_mesh::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 void Acp_mesh::OnBoxOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 }
+void Acp_mesh::second_trace()
+{
+    //cast to charcter
+    Aarrow_zCharacter* Player = Cast<Aarrow_zCharacter>(GetOwner());
+    
+    if (Player && Player->Weapon_mesh)
+    //if (Player)
+    {
+        FName SocketName = Player->Weapon_mesh->GetAttachSocketName();
+        FString SocketNameString = SocketName.ToString();
+        UE_LOG(LogTemp, Warning, TEXT("Weapon Mesh Attach Socket Name: %s"), *SocketNameString);
+        GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("trace"));//event after attach its keeps printing
+       
+    }
 
+    //
+    //Aarrow_zCharacter* Player = Cast<Aarrow_zCharacter>(GetOwner());
+    if (Player)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Player is valid."));
+        if (Player->Weapon_mesh)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Weapon mesh is valid."));
+            FName SocketName = Player->Weapon_mesh->GetAttachSocketName();
+            FString SocketNameString = SocketName.ToString();
+            UE_LOG(LogTemp, Warning, TEXT("Weapon Mesh Attach Socket Name: %s"), *SocketNameString);
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Weapon mesh is invalid."));
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Player is invalid."));
+    }
+
+    GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("trace"));
+
+   
+
+}
