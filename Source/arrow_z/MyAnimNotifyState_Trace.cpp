@@ -46,6 +46,19 @@ void UMyAnimNotifyState_Trace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnim
 		}
 	}
 }
+void UMyAnimNotifyState_Trace::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
+{
+	if (MeshComp && MeshComp->GetOwner())
+	{
+		c_player = Cast<Aarrow_zCharacter>(MeshComp->GetOwner());
+		if (c_player)
+		{
+			c_player->trace_hit();
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_tick_state"));
+
+		}
+	}
+}
 void UMyAnimNotifyState_Trace::StartTracing(USkeletalMeshComponent* MeshComp)
 {
 
