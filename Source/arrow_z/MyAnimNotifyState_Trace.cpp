@@ -28,7 +28,7 @@ void UMyAnimNotifyState_Trace::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 			if (c_player)
 			{
 				c_player->trace_hit();
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_begin_state"));
+				//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_begin_state"));
 
 			}
 		}
@@ -41,7 +41,7 @@ void UMyAnimNotifyState_Trace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnim
 		if (c_player)
 		{
 			//c_player->DeactivateRightWeapon();
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_end_state"));
+			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_end_state"));
 
 		}
 	}
@@ -54,7 +54,7 @@ void UMyAnimNotifyState_Trace::NotifyTick(USkeletalMeshComponent* MeshComp, UAni
 		if (c_player)
 		{
 			c_player->trace_hit();
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_tick_state"));
+			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_tick_state"));
 
 		}
 	}

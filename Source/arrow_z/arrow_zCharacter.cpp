@@ -268,39 +268,6 @@ void Aarrow_zCharacter::note_begin(FName NotifyName, const FBranchingPointNotify
 void Aarrow_zCharacter::trace_hit()
 {
 	
-	/* get actor,attched actor,socket anme
-	if (USkeletalMeshComponent* SkeletalMeshComponent = GetMesh())
-	{
-		// Get all attached children components
-		const TArray<USceneComponent*>& AttachedComponents = SkeletalMeshComponent->GetAttachChildren();
-
-		// Iterate through the attached components
-		for (USceneComponent* AttachedComponent : AttachedComponents)
-		{
-			// Check if the attached component is a static mesh component
-			if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(AttachedComponent))
-			{
-				// Print the name of the attached static mesh component (socket)
-				UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
-
-				// If the attached component is named "sword_mesh", get its socket names
-				if (StaticMeshComponent->GetName() == "sword_mesh")
-				{
-					// Get the names of all sockets associated with the static mesh component
-					TArray<FComponentSocketDescription> SocketDescriptions;
-					StaticMeshComponent->QuerySupportedSockets(SocketDescriptions);
-
-					// Print the names of all sockets
-					for (const FComponentSocketDescription& SocketDescription : SocketDescriptions)
-					{
-						UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *SocketDescription.Name.ToString());
-					}
-				}
-			}
-		}
-	}
-	*/
-	
 	//get actor,attched actor,socket anme + line trace
 	if (USkeletalMeshComponent* SkeletalMeshComponent = GetMesh())
 	{
@@ -314,11 +281,23 @@ void Aarrow_zCharacter::trace_hit()
 			if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(AttachedComponent))
 			{
 				// Print the name of the attached static mesh component (socket)
-				UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
+				//UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
 
 				// If the attached component is named "sword_mesh", get its socket names and locations
 				if (StaticMeshComponent->GetName() == "sword_mesh")
 				{
+					/*print socket name
+					// Get the names of all sockets associated with the static mesh component
+					TArray<FComponentSocketDescription> SocketDescriptions;
+					StaticMeshComponent->QuerySupportedSockets(SocketDescriptions);
+
+					// Print the names of all sockets
+					for (const FComponentSocketDescription& SocketDescription : SocketDescriptions)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *SocketDescription.Name.ToString());
+					}
+					*/ 
+					//print socket location
 					// Get the locations of the "start_trace" and "end_trace" sockets
 					FVector StartTraceLocation = StaticMeshComponent->GetSocketLocation(TEXT("start_trace"));
 					FVector EndTraceLocation = StaticMeshComponent->GetSocketLocation(TEXT("end_trace"));
@@ -330,12 +309,13 @@ void Aarrow_zCharacter::trace_hit()
 					// Perform line trace from start to end trace
 					FHitResult HitResult;
 					FCollisionQueryParams Params;
-					Params.AddIgnoredActor(GetOwner()); // Ignore the owner actor in the line trace
+					//Params.AddIgnoredActor(GetOwner()); // Ignore the owner actor in the line trace
+					Params.AddIgnoredActor(SkeletalMeshComponent->GetOwner()); // Ignore the owner actor in the line trace
 					Params.bTraceComplex = false;
 					//Params.bTraceAsyncScene = true;
-					Params.bReturnPhysicalMaterial = false;
+					Params.bReturnPhysicalMaterial = true;
 
-					//GetWorld()->LineTraceSingleByChannel(HitResult, StartTraceLocation, EndTraceLocation, ECollisionChannel::ECC_Visibility, Params);
+
 					// Perform the line trace
 					bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartTraceLocation, EndTraceLocation, ECollisionChannel::ECC_Visibility, Params);
 
@@ -343,26 +323,16 @@ void Aarrow_zCharacter::trace_hit()
 					if (bHit)
 					{
 						// Handle the hit result (you can print debug information or perform other actions here)
-						//UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *HitResult.GetActor()->GetName());
-						DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, 0, 1.0f);
-						// Access additional hit result data if needed
-						/*
-						UPhysicalMaterial* PhysMaterial = HitResult.PhysMaterial.Get();
-						if (PhysMaterial)
-						{
-							// Print the physical material's name
-							UE_LOG(LogTemp, Warning, TEXT("Hit physical material: %s"), *PhysMaterial->GetName());
-							// Handle the hit result (you can print debug information or perform other actions here)
-							UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *HitResult.GetActor()->GetName());
-							DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Orange, false, 5.0f, 0, 1.0f);
-						}
-						*/
+						UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *HitResult.GetActor()->GetName());
+						DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, ECC_WorldStatic, 1.0f);
+						//DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, 0, 1.0f);
+
 					}
 					else
 					{
 						// No hit, print debug information
 						UE_LOG(LogTemp, Warning, TEXT("Line trace did not hit anything."));
-						DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Green, false, 5.0f, 0, 1.0f);
+						DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Green, false, 5.0f, ECC_WorldStatic, 1.0f);
 					}
 					//
 				}
