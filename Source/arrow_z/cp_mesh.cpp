@@ -120,7 +120,7 @@ void Acp_mesh::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 
         // Unregister from the Overlap Event so it is no longer triggered
         //.RemoveAll(this);
-        second_trace();
+        second_trace(OtherActor);
     }
     
     
@@ -128,23 +128,90 @@ void Acp_mesh::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 void Acp_mesh::OnBoxOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 }
-void Acp_mesh::second_trace()
+void Acp_mesh::second_trace(AActor* OtherActor)
 {
-    //cast to charcter
-    Aarrow_zCharacter* Player = Cast<Aarrow_zCharacter>(GetOwner());
-    
-    if (Player && Player->Weapon_mesh)
-    //if (Player)
-    {
-        FName SocketName = Player->Weapon_mesh->GetAttachSocketName();
-        FString SocketNameString = SocketName.ToString();
-        UE_LOG(LogTemp, Warning, TEXT("Weapon Mesh Attach Socket Name: %s"), *SocketNameString);
-        GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("trace"));//event after attach its keeps printing
-       
-    }
+    /*
+    //get actor,attched actor,socket anme + line trace
+	if (USkeletalMeshComponent* SkeletalMeshComponent = GetOwner())
+	{
+		// Get all attached children components
+		const TArray<USceneComponent*>& AttachedComponents = SkeletalMeshComponent->GetAttachChildren();
 
-    //
+		// Iterate through the attached components
+		for (USceneComponent* AttachedComponent : AttachedComponents)
+		{
+			// Check if the attached component is a static mesh component
+			if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(AttachedComponent))
+			{
+				// Print the name of the attached static mesh component (socket)
+				//UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
+
+				// If the attached component is named "sword_mesh", get its socket names and locations
+				if (StaticMeshComponent->GetName() == "sword_mesh")
+				{
+					//print socket name
+					// Get the names of all sockets associated with the static mesh component
+					TArray<FComponentSocketDescription> SocketDescriptions;
+					StaticMeshComponent->QuerySupportedSockets(SocketDescriptions);
+
+					// Print the names of all sockets
+					for (const FComponentSocketDescription& SocketDescription : SocketDescriptions)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *SocketDescription.Name.ToString());
+					}
+					//
+                    //  
+					//print socket location
+					// Get the locations of the "start_trace" and "end_trace" sockets
+					FVector StartTraceLocation = StaticMeshComponent->GetSocketLocation(TEXT("start_trace"));
+					FVector EndTraceLocation = StaticMeshComponent->GetSocketLocation(TEXT("end_trace"));
+
+					//print socket location
+					//UE_LOG(LogTemp, Warning, TEXT("Start Trace Location: %s"), *StartTraceLocation.ToString());
+					//UE_LOG(LogTemp, Warning, TEXT("Start Trace Location: %s"), *EndTraceLocation.ToString());
+
+					// Perform line trace from start to end trace
+					FHitResult HitResult;
+					FCollisionQueryParams Params;
+					//Params.AddIgnoredActor(GetOwner()); // Ignore the owner actor in the line trace
+					Params.AddIgnoredActor(SkeletalMeshComponent->GetOwner()); // Ignore the owner actor in the line trace
+					Params.bTraceComplex = false;
+					//Params.bTraceAsyncScene = true;
+					Params.bReturnPhysicalMaterial = true;
+
+
+					// Perform the line trace
+					bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartTraceLocation, EndTraceLocation, ECollisionChannel::ECC_Visibility, Params);
+
+					// Check if we hit something
+					if (bHit)
+					{
+						// Handle the hit result (you can print debug information or perform other actions here)
+						UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *HitResult.GetActor()->GetName());
+						DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, ECC_WorldStatic, 1.0f);
+						//DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, 0, 1.0f);
+
+					}
+					else
+					{
+						// No hit, print debug information
+						UE_LOG(LogTemp, Warning, TEXT("Line trace did not hit anything."));
+						DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Green, false, 5.0f, ECC_WorldStatic, 1.0f);
+					}
+					//
+				}
+			}
+		}
+	}
+    
+    */
+
+    /* 
+    Aarrow_zCharacter* Player = Cast<Aarrow_zCharacter>(OtherActor);
     //Aarrow_zCharacter* Player = Cast<Aarrow_zCharacter>(GetOwner());
+    // Get the class of the object
+    //UClass* PlayerClass = Player->GetClass();
+
     if (Player)
     {
         UE_LOG(LogTemp, Warning, TEXT("Player is valid."));
@@ -164,9 +231,13 @@ void Acp_mesh::second_trace()
     {
         UE_LOG(LogTemp, Warning, TEXT("Player is invalid."));
     }
-
-    GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("trace"));
+   */
+    //
+    Aarrow_zCharacter* Player = Cast<Aarrow_zCharacter>(OtherActor);
+    //UClass* PlayerClass = Player->GetClass();
 
    
 
+   
+    //  
 }

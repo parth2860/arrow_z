@@ -46,5 +46,5 @@ public:
 	  void OnBoxOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	 
 	  UFUNCTION(BlueprintCallable)
-	  void second_trace();
+	  void second_trace(AActor* OtherActor);
 };
