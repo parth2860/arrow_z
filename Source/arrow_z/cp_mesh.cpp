@@ -7,6 +7,7 @@
 #include "arrow_zCharacter.h" // Include the character header file
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMeshSocket.h"
+#include "DrawDebugHelpers.h" // Include for visual debugging
 
 // Sets default values
 Acp_mesh::Acp_mesh()
@@ -191,7 +192,7 @@ void Acp_mesh::second_trace(AActor* OtherActor)
         }
 
     */  
-        // 
+        /*
         if (SphereMesh)
         {
             // Get the static mesh associated with the static mesh component
@@ -208,6 +209,8 @@ void Acp_mesh::second_trace(AActor* OtherActor)
                 {
                     const FVector StartLocation = StaticMesh->Sockets[0]->RelativeLocation;
                     const FVector EndLocation = StaticMesh->Sockets[1]->RelativeLocation;
+                    //const FVector StartLocation = StaticMesh->Sockets[0]->GetSocketTransform();
+                    //const FVector EndLocation = StaticMesh->Sockets[1]->GetSocketTransform(StaticMesh->Sockets[1], SphereMesh->GetStaticMesh());
 
                     FHitResult HitResult;
                     //FCollisionQueryParams Params(FName(TEXT("SocketTrace")), false, SphereMesh->GetOwner());
@@ -220,9 +223,14 @@ void Acp_mesh::second_trace(AActor* OtherActor)
                     // Perform the line trace
                     if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility, Params))
                     {
+                        DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Purple, false, 5.0f, ECC_WorldStatic, 1.0f);
+                        //DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Purple, false, -1.0f, 0, 5.0f);
+
                         // If hit, print hit location
-                        UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s, Hit Location: %s"), *StaticMesh->Sockets[i]->SocketName.ToString(), *HitResult.Location.ToString());
-                        DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 5.0f, ECC_WorldStatic, 1.0f);
+                        UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *StaticMesh->Sockets[i]->SocketName.ToString());
+                        //UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"),  *HitResult.Location.ToString());
+                        UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *StartLocation.ToString());
+                        UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *EndLocation.ToString());
 
                     }
                     else
@@ -235,9 +243,85 @@ void Acp_mesh::second_trace(AActor* OtherActor)
         }
 
 
-
-
-
-
+        */
         //
+        UStaticMesh* StaticMesh = SphereMesh->GetStaticMesh();
+        if (SphereMesh)
+        {
+
+            
+            /* Ensure there are at least two sockets
+            if (StaticMesh->Sockets.Num() >= 2)
+            {
+                // Access the sockets and print their locations
+                for (const auto& Socket : StaticMesh->Sockets)
+                {
+                    // Get the socket location
+                    const FVector SocketLocation = Socket->RelativeLocation;//well realtive location doesnt work
+
+                    // Print the socket name and location
+                    UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s, Location: %s"), *Socket->SocketName.ToString(), *SocketLocation.ToString());
+                }
+            }
+            else
+            {
+                UE_LOG(LogTemp, Warning, TEXT("Not enough sockets to perform action."));
+            }
+            */ 
+            //----------------------------------------------------------------
+                       
+                // Check if the attached component is a static mesh component
+                if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(SphereMesh))
+                {
+                    // Print the name of the attached static mesh component (socket)
+                    //UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
+                  
+                    // If the attached component is named "sword_mesh", get its socket names and locations
+                    //if (StaticMeshComponent->GetName() == "secondnary_weapon")
+                    if (StaticMeshComponent->GetName() == "SphereMesh_1")
+                    {
+                       
+                        //print socket location
+                        // Get the locations of the "start_trace" and "end_trace" sockets
+                        FVector StartTraceLocation = StaticMeshComponent->GetSocketLocation(TEXT("start_trace"));
+                        FVector EndTraceLocation = StaticMeshComponent->GetSocketLocation(TEXT("end_trace"));
+
+                        //print socket location
+                        UE_LOG(LogTemp, Warning, TEXT("Start Trace Location: %s"), *StartTraceLocation.ToString());
+                        UE_LOG(LogTemp, Warning, TEXT("Start Trace Location: %s"), *EndTraceLocation.ToString());
+
+                        // Perform line trace from start to end trace
+                        FHitResult HitResult;
+                        FCollisionQueryParams Params;
+                        //Params.AddIgnoredActor(GetOwner()); // Ignore the owner actor in the line trace
+                        Params.AddIgnoredActor(SphereMesh->GetOwner()); // Ignore the owner actor in the line trace
+                        Params.bTraceComplex = false;
+                        //Params.bTraceAsyncScene = true;
+                        Params.bReturnPhysicalMaterial = true;
+
+
+                        // Perform the line trace
+                        bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartTraceLocation, EndTraceLocation, ECollisionChannel::ECC_Visibility, Params);
+
+                        // Check if we hit something
+                        if (bHit)
+                        {
+                            // Handle the hit result (you can print debug information or perform other actions here)
+                            UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *HitResult.GetActor()->GetName());
+                            DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, ECC_WorldStatic, 1.0f);
+                            //DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, 0, 1.0f);
+
+                        }
+                        else
+                        {
+                            // No hit, print debug information
+                            UE_LOG(LogTemp, Warning, TEXT("Line trace did not hit anything."));
+                            DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Green, false, 5.0f, ECC_WorldStatic, 1.0f);
+                        }
+                        //
+                    }
+                }
+            
+        }
+        
 }
