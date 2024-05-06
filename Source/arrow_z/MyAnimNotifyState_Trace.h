@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "arrow_zCharacter.h"
+#include "cp_mesh.h"
 #include "Animation/AnimNotifies/AnimNotifyState.h"
 #include "MyAnimNotifyState_Trace.generated.h"
 
@@ -26,6 +27,10 @@ public:
 	//notify begin,end//worked
 	UPROPERTY()
 	Aarrow_zCharacter* c_player;
+
+	UPROPERTY(EditAnywhere)
+	Acp_mesh* c_weapon;
+
 	//that work only begining and ending of state
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference) override;
 	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference) override;
