@@ -3,6 +3,9 @@
 
 #include "MyAnimNotifyState_Trace.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "arrow_zCharacter.h"
+#include "cp_mesh.h"
+#include "Engine/Engine.h"
 //using namespace UGameplayStatics;
 //custom _notify
 void UMyAnimNotifyState_Trace::trace_notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
@@ -73,8 +76,9 @@ void UMyAnimNotifyState_Trace::NotifyTick(USkeletalMeshComponent* MeshComp, UAni
 		//Acp_mesh* C_WEAPON = Cast<Acp_mesh>(meshp);//uninilitilized used
 		//Acp_mesh* C_WEAPON = Cast<Acp_mesh>(UGameplayStatics::GetActorOfClass(GetWorld(), Acp_mesh::StaticClass()));//A null object was passed as a world context object to UEngine::GetWorldFromContextObject()
 		// c_weapon->second_trace();//0013!UMyAnimNotifyState_Trace::NotifyTick() [D:\Users\PARTH\Documents\Unreal Projects\c++\arrow_z\Source\arrow_z\MyAnimNotifyState_Trace.cpp:116]
+		//Acp_mesh* C_WEAPON = Cast<Acp_mesh>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));//doent work
+		//Acp_mesh* C_WEAPON = Cast<Acp_mesh>(UGameplayStatics::GetActorOfClass(Acp_mesh::StaticClass(),0));
 		/*
-		Acp_mesh* C_WEAPON = Cast<Acp_mesh>(UGameplayStatics::GetActorOfClass(GetWorld(),0));//doesnt work
 		if(C_WEAPON)
 		{ 
 			C_WEAPON->second_trace();
@@ -90,7 +94,7 @@ void UMyAnimNotifyState_Trace::NotifyTick(USkeletalMeshComponent* MeshComp, UAni
 
 	}
 	
-	//
+	/*
 	Aarrow_zCharacter* PlayerCharacter = Cast<Aarrow_zCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));//null references
 	//ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);//null object references
 	//ACharacter* PlayerCharacter;//uninitilized
@@ -112,7 +116,7 @@ void UMyAnimNotifyState_Trace::NotifyTick(USkeletalMeshComponent* MeshComp, UAni
 	{
 		UE_LOG(LogTemp, Warning, TEXT("PlayerCharacter is null."));
 	}
-	//
+	*/
 	
 }
 void UMyAnimNotifyState_Trace::StartTracing(USkeletalMeshComponent* MeshComp)
