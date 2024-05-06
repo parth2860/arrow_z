@@ -123,7 +123,7 @@ void Acp_mesh::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 
         // Unregister from the Overlap Event so it is no longer triggered
         //.RemoveAll(this);
-        second_trace(OtherActor);
+        //second_trace(OtherActor);
     }
     
     
@@ -131,7 +131,8 @@ void Acp_mesh::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 void Acp_mesh::OnBoxOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 }
-void Acp_mesh::second_trace(AActor* OtherActor)
+//void Acp_mesh::second_trace(AActor* OtherActor)
+void Acp_mesh::second_trace()
 {
    
     /* 
@@ -192,65 +193,14 @@ void Acp_mesh::second_trace(AActor* OtherActor)
         }
 
     */  
-        /*
-        if (SphereMesh)
-        {
-            // Get the static mesh associated with the static mesh component
-            UStaticMesh* StaticMesh = SphereMesh->GetStaticMesh();
-
-            // Ensure the static mesh is valid
-            if (StaticMesh)
-            {
-                // Get the number of sockets in the static mesh
-                int32 NumSockets = StaticMesh->Sockets.Num();
-
-                // Perform line trace from each socket location
-                for (int32 i = 0; i < NumSockets; ++i)
-                {
-                    const FVector StartLocation = StaticMesh->Sockets[0]->RelativeLocation;
-                    const FVector EndLocation = StaticMesh->Sockets[1]->RelativeLocation;
-                    //const FVector StartLocation = StaticMesh->Sockets[0]->GetSocketTransform();
-                    //const FVector EndLocation = StaticMesh->Sockets[1]->GetSocketTransform(StaticMesh->Sockets[1], SphereMesh->GetStaticMesh());
-
-                    FHitResult HitResult;
-                    //FCollisionQueryParams Params(FName(TEXT("SocketTrace")), false, SphereMesh->GetOwner());
-                    FCollisionQueryParams Params;
-                    Params.AddIgnoredActor(SphereMesh->GetOwner()); // Ignore the owner actor in the line trace
-                    Params.bTraceComplex = false;
-                    //Params.bTraceAsyncScene = true;
-                    Params.bReturnPhysicalMaterial = true;
-
-                    // Perform the line trace
-                    if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility, Params))
-                    {
-                        DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Purple, false, 5.0f, ECC_WorldStatic, 1.0f);
-                        //DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Purple, false, -1.0f, 0, 5.0f);
-
-                        // If hit, print hit location
-                        UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s"), *StaticMesh->Sockets[i]->SocketName.ToString());
-                        //UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"),  *HitResult.Location.ToString());
-                        UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *StartLocation.ToString());
-                        UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *EndLocation.ToString());
-
-                    }
-                    else
-                    {
-                        // If no hit, print end location
-                        UE_LOG(LogTemp, Warning, TEXT("Socket Name: %s, No Hit, End Location: %s"), *StaticMesh->Sockets[i]->SocketName.ToString(), *EndLocation.ToString());
-                    }
-                }
-            }
-        }
-
-
-        */
+       
         //
         UStaticMesh* StaticMesh = SphereMesh->GetStaticMesh();
         if (SphereMesh)
         {
 
             
-            /* Ensure there are at least two sockets
+            /* print socket name
             if (StaticMesh->Sockets.Num() >= 2)
             {
                 // Access the sockets and print their locations
@@ -308,7 +258,7 @@ void Acp_mesh::second_trace(AActor* OtherActor)
                         {
                             // Handle the hit result (you can print debug information or perform other actions here)
                             UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *HitResult.GetActor()->GetName());
-                            DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, ECC_WorldStatic, 1.0f);
+                            DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Purple, false, 5.0f, ECC_WorldStatic, 1.0f);
                             //DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, 0, 1.0f);
 
                         }
@@ -316,7 +266,7 @@ void Acp_mesh::second_trace(AActor* OtherActor)
                         {
                             // No hit, print debug information
                             UE_LOG(LogTemp, Warning, TEXT("Line trace did not hit anything."));
-                            DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Green, false, 5.0f, ECC_WorldStatic, 1.0f);
+                            DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Black, false, 5.0f, ECC_WorldStatic, 1.0f);
                         }
                         //
                     }
