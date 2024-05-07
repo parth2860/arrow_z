@@ -23,4 +23,21 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//-----------------------------------------------------------------------------------------------
+	UPROPERTY()
+	UStaticMeshComponent* gun_mesh;
+	//UPROPERTY()
+	//UStaticMesh* gun_mesh_asset;
+	
+	UPROPERTY()
+	class USphereComponent* CollisionComp;
+
+	
+
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 };
