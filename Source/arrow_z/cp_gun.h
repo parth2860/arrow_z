@@ -7,7 +7,7 @@
 #include "cp_gun.generated.h"
 
 UCLASS()
-class ARROW_Z_API Acp_gun : public AActor
+class ARROW_Z_API Acp_gun : public AActor 
 {
 	GENERATED_BODY()
 	
@@ -24,7 +24,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	//-----------------------------------------------------------------------------------------------
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "weapon")
 	UStaticMeshComponent* gun_mesh;
 	//UPROPERTY()
 	//UStaticMesh* gun_mesh_asset;

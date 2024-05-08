@@ -217,6 +217,8 @@ public:
 	void HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload);
 	*/
 	//-----------------------------------------------------------------------------------------
-
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+		UStaticMeshComponent* cp_gun; 
+	//-----------------------------------------------------------------------------------------
 };
 

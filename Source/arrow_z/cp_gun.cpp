@@ -4,6 +4,7 @@
 #include "cp_gun.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "arrow_zCharacter.h"
 
 // Sets default values
 Acp_gun::Acp_gun()
@@ -36,7 +37,8 @@ Acp_gun::Acp_gun()
 void Acp_gun::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	// Register our Overlap Event
+	//CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &Acp_gun::OnBeginOverlap);
 }
 
 // Called every frame
@@ -47,7 +49,19 @@ void Acp_gun::Tick(float DeltaTime)
 }
 void Acp_gun::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap"));
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("Overlap"));
+	Aarrow_zCharacter* player = Cast<Aarrow_zCharacter>(OtherActor);
+	//FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTargetNotIncludingScale, true);//error
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);//once attch overlap event run every frame
+	//AttachToActor(player->cp_gun, FAttachmentTransformRules::SnapToTargetNotIncludingScale);//{FAttachmentTransformRules::SnapToTargetNotIncludingScale}//once attach it trigger once
+	AttachToComponent(player->cp_gun, FAttachmentTransformRules::SnapToTargetNotIncludingScale , FName(TEXT("gun_socket")));//
+	gun_mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);//remove collision
+
+	// Unregister from the Overlap Event so it is no longer triggered
+	//CollisionComp->OnComponentBeginOverlap.RemoveAll(this);//
+	
+	
+
 }
 void Acp_gun::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
