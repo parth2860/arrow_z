@@ -38,7 +38,8 @@ void Acp_gun::BeginPlay()
 {
 	Super::BeginPlay();
 	// Register our Overlap Event
-	//CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &Acp_gun::OnBeginOverlap);
+	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &Acp_gun::OnBeginOverlap);
+	CollisionComp->OnComponentEndOverlap.AddDynamic(this, &Acp_gun::OnEndOverlap);
 }
 
 // Called every frame
@@ -54,11 +55,12 @@ void Acp_gun::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	//FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTargetNotIncludingScale, true);//error
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);//once attch overlap event run every frame
 	//AttachToActor(player->cp_gun, FAttachmentTransformRules::SnapToTargetNotIncludingScale);//{FAttachmentTransformRules::SnapToTargetNotIncludingScale}//once attach it trigger once
-	AttachToComponent(player->cp_gun, FAttachmentTransformRules::SnapToTargetNotIncludingScale , FName(TEXT("gun_socket")));//
+	AttachToComponent(player->cp_gun, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("gun_socket")));//once it crashed////overlap/end begin trigger one time
+	//gun_mesh->AttachToComponent(player->cp_gun, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("gun_socket")));//overlap/end begin trigger many time
 	gun_mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);//remove collision
 
 	// Unregister from the Overlap Event so it is no longer triggered
-	//CollisionComp->OnComponentBeginOverlap.RemoveAll(this);//
+	CollisionComp->OnComponentBeginOverlap.RemoveAll(this);//eliminate triggering event
 	
 	
 
@@ -66,4 +68,7 @@ void Acp_gun::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 void Acp_gun::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("End Overlap"));
+
+	// Unregister from the Overlap Event so it is no longer triggered
+	CollisionComp->OnComponentEndOverlap.RemoveAll(this);//eliminate triggering event
 }
