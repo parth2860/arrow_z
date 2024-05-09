@@ -220,5 +220,22 @@ public:
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		UStaticMeshComponent* cp_gun; 
 	//-----------------------------------------------------------------------------------------
+		UFUNCTION()
+		void switch_weapon();
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "socket")
+		USkeletalMeshSocket* back_socket;
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Socket")
+		FName SocketName;
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Socket")
+		FName BoneName;
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Socket")
+		FVector RelativeLocation;
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Socket")
+		FRotator RelativeRotation;
 };
 

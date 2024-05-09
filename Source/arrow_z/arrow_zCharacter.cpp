@@ -685,5 +685,32 @@ bool Aarrow_zCharacter::IsAttacking()
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("not attacking"));
 	return false;
 }*/
+ void Aarrow_zCharacter::switch_weapon()
+ {
+	 // Get the skeletal mesh component
+	 USkeletalMeshComponent* MeshComponent = GetMesh();
+	 if (!MeshComponent)
+	 {
+		 UE_LOG(LogTemp, Error, TEXT("No skeletal mesh component found."));
+		 return;
+	 }
+	
+    /*Create and set the socket in the skeletal mesh
+    FName SocketName = TEXT("new_socket");
+    USkeletalMeshComponent* SkeletalMeshComponent = GetMesh();
+    if (SkeletalMeshComponent)
+    {
+        USkeletalMeshSocket* NewSocket = NewObject<USkeletalMeshSocket>(SkeletalMeshComponent, USkeletalMeshSocket::StaticClass(), SocketName);
+        if (NewSocket)
+        {
+            NewSocket->BoneName = TEXT("bone_name"); // Set the bone name to attach the socket to
+            NewSocket->RelativeLocation = FVector(0.f, 0.f, 0.f); // Set the relative location of the socket
+            NewSocket->RelativeRotation = FRotator(0.f, 0.f, 0.f); // Set the relative rotation of the socket
+            SkeletalMeshComponent->AddSocket(NewSocket); // Add the socket to the skeletal mesh component
+        }
+    }
+	*/
+	
+ }
 
 
