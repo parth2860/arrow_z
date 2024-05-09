@@ -140,6 +140,9 @@ void Aarrow_zCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		//combat
 		//EnhancedInputComponent->BindAction(Combat, ETriggerEvent::Started, this, &Aarrow_zCharacter::Combat);
 		EnhancedInputComponent->BindAction(Combat_Action, ETriggerEvent::Started, this, &Aarrow_zCharacter::Combat);
+		
+		//switch _weapon
+		EnhancedInputComponent->BindAction(Switch_weapon, ETriggerEvent::Started, this, &Aarrow_zCharacter::switch_weapon);
 	}
 	else
 	{
@@ -694,7 +697,7 @@ bool Aarrow_zCharacter::IsAttacking()
 		 UE_LOG(LogTemp, Error, TEXT("No skeletal mesh component found."));
 		 return;
 	 }
-	
+	 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("switch wepon"));
     /*Create and set the socket in the skeletal mesh
     FName SocketName = TEXT("new_socket");
     USkeletalMeshComponent* SkeletalMeshComponent = GetMesh();
@@ -710,6 +713,8 @@ bool Aarrow_zCharacter::IsAttacking()
         }
     }
 	*/
+
+	 
 	
  }
 

@@ -61,6 +61,11 @@ class Aarrow_zCharacter : public ACharacter
 	//UInputAction* Combat;
 	UInputAction* Combat_Action;
 
+	/** interact_action Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	//UInputAction* Combat;
+	UInputAction* Switch_weapon;
+
 	
 
 
