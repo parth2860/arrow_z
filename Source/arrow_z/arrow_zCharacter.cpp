@@ -72,7 +72,7 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 	cp_gun = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("cp_gun"));
 	cp_gun->SetupAttachment(GetMesh(), TEXT("gun_mesh"));
 
-	CurrentWeaponIndex = -1;
+	CurrentWeaponIndex = -1;//wepon inventory
 	//
 }
 

@@ -229,25 +229,12 @@ public:
 		void switch_weapon();
 
 		// Array to hold references to all available weapons
-		UPROPERTY(EditAnywhere, Category = "Weapons")
-		TArray<AWeaponBase*> WeaponInventory;
+		//UPROPERTY(EditAnywhere, Category = "Weapons")
+		//TArray<AWeaponBase*> WeaponInventory;
 
 		// Index of the currently equipped weapon
 		int32 CurrentWeaponIndex;
 
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "socket")
-		USkeletalMeshSocket* back_socket;
-
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Socket")
-		FName SocketName;
-
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Socket")
-		FName BoneName;
-
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Socket")
-		FVector RelativeLocation;
-
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Socket")
-		FRotator RelativeRotation;
+		
 };
 
