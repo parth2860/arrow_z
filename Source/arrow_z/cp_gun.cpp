@@ -56,7 +56,7 @@ void Acp_gun::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);//once attch overlap event run every frame
 	//AttachToActor(player->cp_gun, FAttachmentTransformRules::SnapToTargetNotIncludingScale);//{FAttachmentTransformRules::SnapToTargetNotIncludingScale}//once attach it trigger once
 	//AttachToComponent(player->cp_gun, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("gun_socket")));//once it crashed////overlap/end begin trigger one time
-	gun_mesh->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("gun_socket")));
+	gun_mesh->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("gun_socket")));//attch to dedicated socket but,it restrict  create new mesh for new weapon
 	//gun_mesh->AttachToComponent(player->cp_gun, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("gun_socket")));//overlap/end begin trigger many time
 	gun_mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);//remove collision
 
