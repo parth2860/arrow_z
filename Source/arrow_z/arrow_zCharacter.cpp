@@ -72,6 +72,7 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 	cp_gun = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("cp_gun"));
 	cp_gun->SetupAttachment(GetMesh(), TEXT("gun_mesh"));
 
+	CurrentWeaponIndex = -1;
 	//
 }
 
@@ -698,24 +699,67 @@ bool Aarrow_zCharacter::IsAttacking()
 		 return;
 	 }
 	 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("switch wepon"));
-    /*Create and set the socket in the skeletal mesh
-    FName SocketName = TEXT("new_socket");
-    USkeletalMeshComponent* SkeletalMeshComponent = GetMesh();
-    if (SkeletalMeshComponent)
-    {
-        USkeletalMeshSocket* NewSocket = NewObject<USkeletalMeshSocket>(SkeletalMeshComponent, USkeletalMeshSocket::StaticClass(), SocketName);
-        if (NewSocket)
-        {
-            NewSocket->BoneName = TEXT("bone_name"); // Set the bone name to attach the socket to
-            NewSocket->RelativeLocation = FVector(0.f, 0.f, 0.f); // Set the relative location of the socket
-            NewSocket->RelativeRotation = FRotator(0.f, 0.f, 0.f); // Set the relative rotation of the socket
-            SkeletalMeshComponent->AddSocket(NewSocket); // Add the socket to the skeletal mesh component
-        }
-    }
-	*/
+    
+	 //get attached component
+	// MeshComponent->GetAttachChildren();
+	 // Iterate through the attached components
+	 for (USceneComponent* AttachedComponent : MeshComponent->GetAttachChildren())
+	 {
+		 // Check if the attached component is a static mesh component
+		 if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(AttachedComponent))
+		 {
+			 // Print the name of the attached static mesh component (socket)
+			 UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
 
-	 
+			 // If the attached component is named "sword_mesh", get its socket names and locations
+			 if (StaticMeshComponent->GetName() == "sword_mesh")
+			 {
+				 StaticMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("sword back")));
+				// StaticMeshComponent->
+			 }
+		 }
+	 }
+	 //
+	 /*
+	 // inventory
+	 int32 CurrentWeaponIndex;
+
+	 float AxisValue;
+	 if (AxisValue > 0)
+	 {
+		 // Mouse wheel scrolled up, switch to next weapon
+		 SwitchToNextWeapon();
+	 }
+	 else if (AxisValue < 0)
+	 {
+		 // Mouse wheel scrolled down, switch to previous weapon
+		 SwitchToPreviousWeapon();
+	 }*/
 	
  }
+ /*
+ void SwitchToNextWeapon()
+ {
+
+	 if (WeaponInventory.Num() == 0)
+	 {
+		 return;
+	 }
+
+	 CurrentWeaponIndex = (CurrentWeaponIndex + 1) % WeaponInventory.Num();
+	// EquipWeapon(WeaponInventory[CurrentWeaponIndex]);
+ }
+
+ void SwitchToPreviousWeapon()
+ {
+	 if (WeaponInventory.Num() == 0)
+	 {
+		 return;
+	 }
+
+	 CurrentWeaponIndex = (CurrentWeaponIndex - 1 + WeaponInventory.Num()) % WeaponInventory.Num();
+	// EquipWeapon(WeaponInventory[CurrentWeaponIndex]);
+ }
+ */
 
 
