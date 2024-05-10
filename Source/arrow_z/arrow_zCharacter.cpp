@@ -16,6 +16,8 @@
 #include "Components/SkeletalMeshComponent.h"//get access skeleton mesh
 #include "Runtime/Engine/Classes/Engine/StaticMeshSocket.h"//to get socket name from ue5 editor
 #include "Components/StaticMeshComponent.h"//to get staticmesh component
+#include "cp_mesh.h"//to get access to cp_mesh
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -287,10 +289,10 @@ void Aarrow_zCharacter::trace_hit()
 			if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(AttachedComponent))
 			{
 				// Print the name of the attached static mesh component (socket)
-				//UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
+				UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
 
 				// If the attached component is named "sword_mesh", get its socket names and locations
-				if (StaticMeshComponent->GetName() == "sword_mesh")
+				if (StaticMeshComponent->GetName() == "sword_mesh")//first sword_mesh
 				{
 					/*print socket name
 					// Get the names of all sockets associated with the static mesh component
@@ -341,6 +343,21 @@ void Aarrow_zCharacter::trace_hit()
 						DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Green, false, 5.0f, ECC_WorldStatic, 1.0f);
 					}
 					//
+				}
+				if (StaticMeshComponent->GetName() == "secondary_Weapon_mesh")//second swor mesh
+				{
+					//Acp_mesh* strike = Cast<Acp_mesh>(StaticMeshComponent);
+					//Acp_mesh* strike = Cast<Acp_mesh>(StaticMeshComponent->GetOwner());
+					//Acp_mesh* strike = Cast<Acp_mesh>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+					//Acp_mesh* strike = Cast<Acp_mesh>(UGameplayStatics::GetActorOfClass(GetWorld(), 0));
+					Acp_mesh* strike = nullptr;
+					strike = Cast<Acp_mesh>(UGameplayStatics::GetActorOfClass(GetWorld(), Acp_mesh::StaticClass()));
+					if (strike)
+					{
+						strike->second_trace();
+					}
+					
+
 				}
 			}
 		}
