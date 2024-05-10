@@ -72,7 +72,7 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 	
 	//--------------------------------------------------------------------------------------------------------------
 	cp_gun = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("cp_gun"));
-	cp_gun->SetupAttachment(GetMesh(), TEXT("gun_mesh"));
+	cp_gun->SetupAttachment(GetMesh(), TEXT("gun_holder"));
 
 	CurrentWeaponIndex = -1;//wepon inventory
 	//
@@ -717,72 +717,112 @@ bool Aarrow_zCharacter::IsAttacking()
 	 }
 	 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("switch wepon"));
     
-	 //get attached component
-	// MeshComponent->GetAttachChildren();
-	 // Iterate through the attached components
-	 for (USceneComponent* AttachedComponent : MeshComponent->GetAttachChildren())
-	 {
-		 // Check if the attached component is a static mesh component
-		 if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(AttachedComponent))
-		 {
-			 // Print the name of the attached static mesh component (socket)
-			 UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
-
-			 // If the attached component is named "sword_mesh", get its socket names and locations
-			 if (StaticMeshComponent->GetName() == "sword_mesh")
-			 {
-				 StaticMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("sword back")));
-				// StaticMeshComponent->
-			 }
-		 }
-	 }
+	 
 	 //
-	 //
+	 
 	 // inventory
 	 CurrentWeaponIndex = (CurrentWeaponIndex + 1) % 3; // Assuming you have 3 weapons
 	 //GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("switch wepon no : %d"), CurrentWeaponIndex.ToInt());
 	 UE_LOG(LogTemp, Warning, TEXT("CurrentWeaponIndex: %d"), CurrentWeaponIndex);
 
-	 if (CurrentWeaponIndex == 1)
+	 if (CurrentWeaponIndex == 1)//gun
 	 {
 		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("switch wepon no : 1"));
+		 //--------------------------------------------------------------------------------------------------------------
+		 //attach gun
+		 // Iterate through the attached components
+		 for (USceneComponent* AttachedComponent : MeshComponent->GetAttachChildren())
+		 {
+			 // Check if the attached component is a static mesh component
+			 if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(AttachedComponent))
+			 {
+				 // Print the name of the attached static mesh component (socket)
+				 UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
+
+				 // If the attached component is named "sword_mesh", get its socket names and locations
+				 if (StaticMeshComponent->GetName() == "gun_mesh")
+				 {
+					 StaticMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("gun_socket")));
+					 // StaticMeshComponent->
+				 }
+			 }
+		 }
+		 //--------------------------------------------------------------------------------------------------------------
+		 //deattch sword
+		
+			// Iterate through the attached components
+			 for (USceneComponent* AttachedComponent : MeshComponent->GetAttachChildren())
+			 {
+				 // Check if the attached component is a static mesh component
+				 if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(AttachedComponent))
+				 {
+					 // Print the name of the attached static mesh component (socket)
+					 UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
+
+					 // If the attached component is named "sword_mesh", get its socket names and locations
+					 if (StaticMeshComponent->GetName() == "sword_mesh")
+					 {
+						 StaticMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("sword_socket_2")));
+						 // StaticMeshComponent->
+					 }
+				 }
+			 }
+		 //--------------------------------------------------------------------------------------------------------------
+
 	 }
-	 else if (CurrentWeaponIndex == 2)
+	 else if (CurrentWeaponIndex == 2)//assault rifle
 	 {
 		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("switch wepon no : 2"));
+		 //--------------------------------------------------------------------------------------------------------------
+		 //attach rifle
+		 //--------------------------------------------------------------------------------------------------------------
+		 //deattch	gun 
+		 // Iterate through the attached components
+		 for (USceneComponent* AttachedComponent : MeshComponent->GetAttachChildren())
+		 {
+			 // Check if the attached component is a static mesh component
+			 if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(AttachedComponent))
+			 {
+				 // Print the name of the attached static mesh component (socket)
+				 UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
+
+				 // If the attached component is named "sword_mesh", get its socket names and locations
+				 if (StaticMeshComponent->GetName() == "gun_mesh")
+				 {
+					 StaticMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("gun_socket_2")));
+					 // StaticMeshComponent->
+				 }
+			 }
+		 }
+		 //--------------------------------------------------------------------------------------------------------------
 	 }
-	 else
+	 else//sword
 	 {
 		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("switch wepon no : 0"));
+		 //--------------------------------------------------------------------------------------------------------------
+		 //attach sword
+		 
+			 // Iterate through the attached components
+			 for (USceneComponent* AttachedComponent : MeshComponent->GetAttachChildren())
+			 {
+				 // Check if the attached component is a static mesh component
+				 if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(AttachedComponent))
+				 {
+					 // Print the name of the attached static mesh component (socket)
+					 UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
+
+					 // If the attached component is named "sword_mesh", get its socket names and locations
+					 if (StaticMeshComponent->GetName() == "sword_mesh")
+					 {
+						 StaticMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("sword_socket")));
+						 // StaticMeshComponent->
+					 }
+				 }
+			 }
+		 //--------------------------------------------------------------------------------------------------------------
+		 //deattch	rifle
+		 //--------------------------------------------------------------------------------------------------------------
 	 }
-	 
-	
-	 
-	
+
  }
- /*
- void SwitchToNextWeapon()
- {
-
-	 if (WeaponInventory.Num() == 0)
-	 {
-		 return;
-	 }
-
-	 CurrentWeaponIndex = (CurrentWeaponIndex + 1) % WeaponInventory.Num();
-	// EquipWeapon(WeaponInventory[CurrentWeaponIndex]);
- }
-
- void SwitchToPreviousWeapon()
- {
-	 if (WeaponInventory.Num() == 0)
-	 {
-		 return;
-	 }
-
-	 CurrentWeaponIndex = (CurrentWeaponIndex - 1 + WeaponInventory.Num()) % WeaponInventory.Num();
-	// EquipWeapon(WeaponInventory[CurrentWeaponIndex]);
- }
- */
-
 
