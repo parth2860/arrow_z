@@ -289,7 +289,7 @@ void Aarrow_zCharacter::trace_hit()
 			if (UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(AttachedComponent))
 			{
 				// Print the name of the attached static mesh component (socket)
-				UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
+				//UE_LOG(LogTemp, Warning, TEXT("Attached Component Name: %s"), *StaticMeshComponent->GetName());
 
 				// If the attached component is named "sword_mesh", get its socket names and locations
 				if (StaticMeshComponent->GetName() == "sword_mesh")//first sword_mesh

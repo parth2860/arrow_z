@@ -54,7 +54,7 @@ void UMyAnimNotifyState_Trace::NotifyTick(USkeletalMeshComponent* MeshComp, UAni
 {
 	//c_weapon->second_trace(); //EXCEPTION_ACCESS_VIOLATION reading address 0x0000000000000420
 
-
+	
 	if (MeshComp && MeshComp->GetOwner())
 	{
 		c_player = Cast<Aarrow_zCharacter>(MeshComp->GetOwner());
@@ -78,20 +78,29 @@ void UMyAnimNotifyState_Trace::NotifyTick(USkeletalMeshComponent* MeshComp, UAni
 		// c_weapon->second_trace();//0013!UMyAnimNotifyState_Trace::NotifyTick() [D:\Users\PARTH\Documents\Unreal Projects\c++\arrow_z\Source\arrow_z\MyAnimNotifyState_Trace.cpp:116]
 		//Acp_mesh* C_WEAPON = Cast<Acp_mesh>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));//doent work
 		//Acp_mesh* C_WEAPON = Cast<Acp_mesh>(UGameplayStatics::GetActorOfClass(Acp_mesh::StaticClass(),0));
-		/*
+		//
+		//Acp_mesh* C_WEAPON = nullptr;
+		//C_WEAPON = Cast<Acp_mesh>(UGameplayStatics::GetActorOfClass(GetWorld(), Acp_mesh::StaticClass()));//null object references
+
+		// Specify the class you want to retrieve
+		UClass* cp_mesh = Acp_mesh::StaticClass(); // Replace AYourClass with the class you want to find
+		// Get the actor of the specified class
+		Acp_mesh* C_WEAPON = Cast<Acp_mesh>(UGameplayStatics::GetActorOfClass(GetWorld(), cp_mesh));//null object references
+		//
 		if(C_WEAPON)
 		{ 
-			C_WEAPON->second_trace();
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_tick_state_succeded"));
+			//C_WEAPON->second_trace();
+			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_tick_state_succeded"));
 
 		}
 		else
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_tick_state_failed"));
+			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_tick_state_failed"));
 		}
-		*/
-		
+		//
+		//
 
+		
 	}
 	
 	/*
