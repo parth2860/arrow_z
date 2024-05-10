@@ -26,7 +26,7 @@ void UCP_Actor_State_Component::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	GEngine->AddOnScreenDebugMessage(-1, 20.0f, FColor::Yellow, TEXT("component"));
 }
 
 
@@ -36,6 +36,7 @@ void UCP_Actor_State_Component::TickComponent(float DeltaTime, ELevelTick TickTy
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	GEngine->AddOnScreenDebugMessage(-1, 20.0f, FColor::Yellow, TEXT("component"));
 }
 //--------------------------------------------------------------------------
 void UCP_Actor_State_Component::IncreaseHealth(float Amount)
