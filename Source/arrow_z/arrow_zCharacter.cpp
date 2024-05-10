@@ -737,21 +737,27 @@ bool Aarrow_zCharacter::IsAttacking()
 		 }
 	 }
 	 //
-	 /*
+	 //
 	 // inventory
-	 int32 CurrentWeaponIndex;
+	 CurrentWeaponIndex = (CurrentWeaponIndex + 1) % 3; // Assuming you have 3 weapons
+	 //GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("switch wepon no : %d"), CurrentWeaponIndex.ToInt());
+	 UE_LOG(LogTemp, Warning, TEXT("CurrentWeaponIndex: %d"), CurrentWeaponIndex);
 
-	 float AxisValue;
-	 if (AxisValue > 0)
+	 if (CurrentWeaponIndex == 1)
 	 {
-		 // Mouse wheel scrolled up, switch to next weapon
-		 SwitchToNextWeapon();
+		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("switch wepon no : 1"));
 	 }
-	 else if (AxisValue < 0)
+	 else if (CurrentWeaponIndex == 2)
 	 {
-		 // Mouse wheel scrolled down, switch to previous weapon
-		 SwitchToPreviousWeapon();
-	 }*/
+		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("switch wepon no : 2"));
+	 }
+	 else
+	 {
+		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("switch wepon no : 0"));
+	 }
+	 
+	
+	 
 	
  }
  /*
