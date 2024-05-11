@@ -17,6 +17,7 @@
 #include "Runtime/Engine/Classes/Engine/StaticMeshSocket.h"//to get socket name from ue5 editor
 #include "Components/StaticMeshComponent.h"//to get staticmesh component
 #include "cp_mesh.h"//to get access to cp_mesh
+#include "Components/ArrowComponent.h" 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 
@@ -74,6 +75,8 @@ Aarrow_zCharacter::Aarrow_zCharacter()
 	cp_gun = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("cp_gun"));
 	cp_gun->SetupAttachment(GetMesh(), TEXT("gun_holder"));
 
+	WeaponAttachPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("WeaponAttachPoint"));
+	WeaponAttachPoint->SetupAttachment(FollowCamera);
 	CurrentWeaponIndex = -1;//wepon inventory
 	//
 }

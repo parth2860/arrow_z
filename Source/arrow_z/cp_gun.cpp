@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "arrow_zCharacter.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "cp_bullets.h"
 
 // Sets default values
@@ -32,7 +33,7 @@ Acp_gun::Acp_gun()
 	}//
 
 	isequiped;
-
+	
 }
 
 // Called when the game starts or when spawned
@@ -78,25 +79,34 @@ void Acp_gun::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 }
 void Acp_gun::fire()
 {
+	//Aarrow_zCharacter* player = Cast<Aarrow_zCharacter>(UGameplayStatics::GetActorOfClass(Aarrow_zCharacter::StaticClass(), 0));
+
 	if (isequiped == true)
 	{
 		// Get a reference to the game world
 		UWorld* World = GetWorld();
 		if (World)
 		{
+			
+			FVector loc = gun_mesh->GetSocketLocation("muzzle_socket");
+			FRotator rot = gun_mesh->GetSocketRotation("muzzle_socket");
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("socket location : %s"), loc);
+
 			// Define the spawn parameters (location, rotation, etc.)
 			FVector SpawnLocation(0.f, 0.f, 100.f); // Example spawn location
 			FRotator SpawnRotation(0.f, 0.f, 0.f); // Example spawn rotation
 			FActorSpawnParameters SpawnParams;
 
 			// Spawn the actor from the specified class
-			Acp_bullets* SpawnedActor = World->SpawnActor<Acp_bullets>(Acp_bullets::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
+			Acp_bullets* SpawnedActor = World->SpawnActor<Acp_bullets>(Acp_bullets::StaticClass(), loc, rot, SpawnParams);
 
 			// Check if the actor was successfully spawned
 			if (SpawnedActor)
 			{
 				// Optionally, perform additional initialization or manipulation of the spawned actor
 				// For example, you can set properties, attach to other actors, etc.
+				UE_LOG(LogTemp, Error, TEXT(" spawn actor from class AYourActorClass."));
+
 			}
 			else
 			{

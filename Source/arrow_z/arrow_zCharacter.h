@@ -232,6 +232,9 @@ public:
 		// Index of the currently equipped weapon
 		int32 CurrentWeaponIndex;
 
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+		UArrowComponent* WeaponAttachPoint;
+
 		
 };
 
