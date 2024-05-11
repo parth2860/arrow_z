@@ -32,6 +32,7 @@ public:
 	UPROPERTY()
 	class USphereComponent* CollisionComp;
 
+	bool isequiped;
 	
 
 	UFUNCTION()
@@ -39,5 +40,8 @@ public:
 
 	UFUNCTION()
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION(BlueprintCallable, Category = "fire")
+	void fire();
 
 };

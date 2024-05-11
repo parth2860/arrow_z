@@ -28,13 +28,26 @@ Acp_bullets::Acp_bullets()
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
-	ProjectileMovement->InitialSpeed = 3000.f;
-	ProjectileMovement->MaxSpeed = 3000.f;
+	ProjectileMovement->InitialSpeed = 1000.f;
+	ProjectileMovement->MaxSpeed = 1000.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 
 	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	InitialLifeSpan = 9.0f;
+
+	bullets= CreateDefaultSubobject<UStaticMeshComponent>(TEXT("bullets"));
+	bullets->SetupAttachment(RootComponent);
+	//gun_mesh->
+	//
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("StaticMesh'/Game/assets/3d_mesh/bullet-mesh.bullet-mesh'"));// /arrow_z/Content/assets/3d_mesh/bullet-mesh.uasset
+	//static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("StaticMesh'/Game/LevelPrototyping/Meshes/SM_Cylinder.SM_Cylinder'"));
+	if (MeshAsset.Succeeded())
+	{
+		bullets->SetStaticMesh(MeshAsset.Object);
+		bullets->SetRelativeScale3D(FVector(0.1f, 0.1f, 0.1f));
+	}//
+
 }
 
 // Called when the game starts or when spawned
@@ -58,6 +71,7 @@ void Acp_bullets::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 
 		Destroy();
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("Hit"));
 	}
 }
 

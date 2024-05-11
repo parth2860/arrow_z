@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "arrow_zCharacter.h"
+#include "cp_bullets.h"
 
 // Sets default values
 Acp_gun::Acp_gun()
@@ -30,6 +31,7 @@ Acp_gun::Acp_gun()
 		gun_mesh->SetStaticMesh(MeshAsset.Object);
 	}//
 
+	isequiped;
 
 }
 
@@ -63,6 +65,7 @@ void Acp_gun::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	// Unregister from the Overlap Event so it is no longer triggered
 	CollisionComp->OnComponentBeginOverlap.RemoveAll(this);//eliminate triggering event
 	
+	 isequiped = true;
 	
 
 }
@@ -72,4 +75,41 @@ void Acp_gun::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 	// Unregister from the Overlap Event so it is no longer triggered
 	CollisionComp->OnComponentEndOverlap.RemoveAll(this);//eliminate triggering event
+}
+void Acp_gun::fire()
+{
+	if (isequiped == true)
+	{
+		// Get a reference to the game world
+		UWorld* World = GetWorld();
+		if (World)
+		{
+			// Define the spawn parameters (location, rotation, etc.)
+			FVector SpawnLocation(0.f, 0.f, 100.f); // Example spawn location
+			FRotator SpawnRotation(0.f, 0.f, 0.f); // Example spawn rotation
+			FActorSpawnParameters SpawnParams;
+
+			// Spawn the actor from the specified class
+			Acp_bullets* SpawnedActor = World->SpawnActor<Acp_bullets>(Acp_bullets::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
+
+			// Check if the actor was successfully spawned
+			if (SpawnedActor)
+			{
+				// Optionally, perform additional initialization or manipulation of the spawned actor
+				// For example, you can set properties, attach to other actors, etc.
+			}
+			else
+			{
+				// Handle error if actor spawning failed
+				UE_LOG(LogTemp, Error, TEXT("Failed to spawn actor from class AYourActorClass."));
+			}
+		}
+		else
+		{
+			// Handle error if world reference is invalid
+			UE_LOG(LogTemp, Error, TEXT("World reference is null. Unable to spawn actor."));
+		}
+
+
+	}
 }
