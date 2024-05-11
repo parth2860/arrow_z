@@ -79,7 +79,8 @@ void Acp_gun::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 }
 void Acp_gun::fire()
 {
-	//Aarrow_zCharacter* player = Cast<Aarrow_zCharacter>(UGameplayStatics::GetActorOfClass(Aarrow_zCharacter::StaticClass(), 0));
+	Aarrow_zCharacter* player = Cast<Aarrow_zCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	player->PlayAnimMontage(slot1);
 
 	if (isequiped == true)
 	{
@@ -87,15 +88,16 @@ void Acp_gun::fire()
 		UWorld* World = GetWorld();
 		if (World)
 		{
-			
+		
 			FVector loc = gun_mesh->GetSocketLocation("muzzle_socket");
 			FRotator rot = gun_mesh->GetSocketRotation("muzzle_socket");
 			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("socket location : %s"), loc);
 
-			// Define the spawn parameters (location, rotation, etc.)
-			FVector SpawnLocation(0.f, 0.f, 100.f); // Example spawn location
-			FRotator SpawnRotation(0.f, 0.f, 0.f); // Example spawn rotation
+			//spawn parameters
 			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn; // Define how to handle collisions during spawning
+			SpawnParams.Owner = this; // Set the owner of the spawned actor
+			//SpawnParams.Instigator = Instigator; // Set the instigator of the spawned actor (e.g., the player character)
 
 			// Spawn the actor from the specified class
 			Acp_bullets* SpawnedActor = World->SpawnActor<Acp_bullets>(Acp_bullets::StaticClass(), loc, rot, SpawnParams);
@@ -105,7 +107,7 @@ void Acp_gun::fire()
 			{
 				// Optionally, perform additional initialization or manipulation of the spawned actor
 				// For example, you can set properties, attach to other actors, etc.
-				UE_LOG(LogTemp, Error, TEXT(" spawn actor from class AYourActorClass."));
+				UE_LOG(LogTemp, Error, TEXT(" sbullets spawned"));
 
 			}
 			else

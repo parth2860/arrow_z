@@ -28,8 +28,8 @@ Acp_bullets::Acp_bullets()
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
-	ProjectileMovement->InitialSpeed = 1000.f;
-	ProjectileMovement->MaxSpeed = 1000.f;
+	ProjectileMovement->InitialSpeed = 3000.f;
+	ProjectileMovement->MaxSpeed = 3000.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 
@@ -45,7 +45,7 @@ Acp_bullets::Acp_bullets()
 	if (MeshAsset.Succeeded())
 	{
 		bullets->SetStaticMesh(MeshAsset.Object);
-		bullets->SetRelativeScale3D(FVector(0.1f, 0.1f, 0.1f));
+		bullets->SetRelativeScale3D(FVector(0.05f, 0.01f, 0.01f));//size of bullets
 	}//
 
 }
@@ -73,5 +73,6 @@ void Acp_bullets::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 		Destroy();
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("Hit"));
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("2nd Hit"));
 }
 
