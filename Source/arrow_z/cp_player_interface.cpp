@@ -6,7 +6,7 @@
 // Add default functionality here for any Icp_player_interface functions that are not pure virtual.
 
 //
-void Icp_player_interface::EquipWeapon()//need way to call default function
+void Icp_player_interface::EquipWeapon()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("interface screen"));
 	

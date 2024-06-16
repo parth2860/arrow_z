@@ -109,7 +109,8 @@ void Aarrow_zCharacter::BeginPlay()
 	*/
 	//
 
-	EquipWeapon();//interface function called
+	//EquipWeapon();//overrided interface function called
+	//ARROW_Z_cp_player_interface_generated_h::Icp_player_interface::EquipWeapon();//default function called
 }
 void Aarrow_zCharacter::Tick(float DeltaTime)
 {
@@ -836,9 +837,7 @@ bool Aarrow_zCharacter::IsAttacking()
 
  }
  //
- /*need to call default function
- void Aarrow_zCharacter::EquipWeapon()
- {}*/
+ 
  bool Aarrow_zCharacter::ReactToTrigger()
  {
 	 return false;

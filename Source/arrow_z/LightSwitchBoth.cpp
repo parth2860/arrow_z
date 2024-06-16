@@ -4,6 +4,7 @@
 #include "LightSwitchBoth.h"
 #include "Components/PointLightComponent.h"
 #include "Components/SphereComponent.h"
+#include "cp_player_interface.h"
 
 // Sets default values
 ALightSwitchBoth::ALightSwitchBoth()
@@ -34,6 +35,7 @@ void ALightSwitchBoth::BeginPlay()
 {
 	Super::BeginPlay();
 	
+    //ARROW_Z_cp_player_interface_generated_h::Icp_player_interface::EquipWeapon();//default function called//without inherited interface class
 }
 
 // Called every frame
