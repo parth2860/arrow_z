@@ -4,3 +4,15 @@
 #include "cp_player_interface.h"
 
 // Add default functionality here for any Icp_player_interface functions that are not pure virtual.
+
+//
+void Icp_player_interface::EquipWeapon()//need way to call default function
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("interface screen"));
+	
+}
+//
+bool Icp_player_interface::ReactToTrigger()
+{
+	return false;
+}//

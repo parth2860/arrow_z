@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "cp_player_interface.h"
 #include "arrow_zCharacter.generated.h"
 
 class USpringArmComponent;
@@ -16,8 +17,8 @@ class weapon_component;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
-UCLASS(config=Game)
-class Aarrow_zCharacter : public ACharacter
+UCLASS(config=Game, Blueprintable)
+class Aarrow_zCharacter : public ACharacter, public Icp_player_interface
 {
 	GENERATED_BODY()
 
@@ -235,6 +236,13 @@ public:
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		UArrowComponent* WeaponAttachPoint;
 
+	//-----------------------------------------------------------------------------------------
+	//interface
+		virtual void EquipWeapon() override;
+
+		virtual bool ReactToTrigger() override;
 		
+		// Blueprint Native Event override
+		//bool ReactToTrigger_Implementation() override;
 };
 

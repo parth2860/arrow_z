@@ -108,7 +108,8 @@ void Aarrow_zCharacter::BeginPlay()
 	}
 	*/
 	//
-	
+
+	EquipWeapon();//interface function called
 }
 void Aarrow_zCharacter::Tick(float DeltaTime)
 {
@@ -828,4 +829,19 @@ bool Aarrow_zCharacter::IsAttacking()
 	 }
 
  }
+ //
+ void Aarrow_zCharacter::EquipWeapon()
+ {
+	 GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character interface applied"));
+
+ }
+ //
+ /*need to call default function
+ void Aarrow_zCharacter::EquipWeapon()
+ {}*/
+ bool Aarrow_zCharacter::ReactToTrigger()
+ {
+	 return false;
+ }
+ //
 

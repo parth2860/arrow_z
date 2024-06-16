@@ -22,4 +22,13 @@ class ARROW_Z_API Icp_player_interface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+
+	virtual void EquipWeapon();
+	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "interface")//Blueprint callable interface functions cannot be virtual.
+	//void EquipWeapon();
+	
+	virtual bool ReactToTrigger();
+
+	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "interface")
+	//bool ReactToTrigger();
 };
