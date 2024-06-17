@@ -4,7 +4,9 @@
 #include "LightSwitchBoth.h"
 #include "Components/PointLightComponent.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "cp_player_interface.h"
+#include "arrow_zCharacter.h"
 
 // Sets default values
 ALightSwitchBoth::ALightSwitchBoth()
@@ -35,7 +37,16 @@ void ALightSwitchBoth::BeginPlay()
 {
 	Super::BeginPlay();
 	
-    //ARROW_Z_cp_player_interface_generated_h::Icp_player_interface::EquipWeapon();//default function called//without inherited interface class
+	//
+	Aarrow_zCharacter* player = Cast<Aarrow_zCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));//worked,player caster or interface implemented actor casting
+    //Icp_player_interface* ip = Cast<Icp_player_interface>(player);
+    //
+    Icp_player_interface* ip = Cast<Icp_player_interface>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));//worked,indirect player casting ,interface casting
+    if (ip)
+    {
+        // Call the interface function
+        ip->EquipWeapon();
+    }
 }
 
 // Called every frame
