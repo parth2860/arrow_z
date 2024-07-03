@@ -223,6 +223,36 @@ public:
 	void HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload);
 	*/
 	//-----------------------------------------------------------------------------------------
+	//combo - 3
+	// 		// Player Anim Montages
+	 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "combo_3")
+	 		UAnimMontage* ca_1;
+			UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "combo_3")
+	 		UAnimMontage* ca_2;
+	 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "combo_3")
+	 		UAnimMontage* ca_3;
+	        
+			int combo_index=0;
+			bool is_attacking = true;//set to true to start the combo//otherwise it take two time click to start combo
+			bool save_attack = false;
+
+			UFUNCTION(BlueprintCallable, Category = "combo_3")
+	 		// Method for handling light attacks
+	 		void LightAttack();
+			void save_combo();
+			void reset_combo();
+	 		// Method for handling heavy attacks
+	 		void HeavyAttack();
+	 		// Method for handling special attacks
+	 		void SpecialAttack();
+	 		// Method for getting whether player is attacking
+	 		//bool IsAttacking();
+			//int m_iComboAttackIndex = 0;
+
+	 		// Event handler for montage notify begin
+	 		//UFUNCTION()
+	 		//void HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload);
+	//-----------------------------------------------------------------------------------------
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		UStaticMeshComponent* cp_gun; 
 	//-----------------------------------------------------------------------------------------

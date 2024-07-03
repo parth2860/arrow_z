@@ -602,7 +602,7 @@ void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 
 
 //--------------------------------------------------------------------------------------------------------------
-//combo_1
+//combo_1//doesnt work
  void Aarrow_zCharacter::combat()
 {
 	 //combo_count = 0;
@@ -709,6 +709,78 @@ bool Aarrow_zCharacter::IsAttacking()
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("not attacking"));
 	return false;
 }*/
+//-----------------------------------------------------------------------------------------
+ //combo_3
+ void Aarrow_zCharacter::LightAttack()
+ {
+	// PlayAnimMontage(ca_1);
+	 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("new combo play"));
+
+	 if (is_attacking == true)
+	 {
+		 save_attack = true;
+	 }
+	 else
+	 {
+		 is_attacking = true;
+		 save_combo();
+	 }
+	 // Bind the function to the OnMontageEnded event
+	 //GetMesh()->GetAnimInstance()->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::LightAttack_switcher);
+	
+	 save_combo();
+ }
+ void Aarrow_zCharacter::save_combo()
+ {
+	 if (save_attack == true)
+	 {
+		 save_attack = false;
+		
+		 //GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("call"));
+
+	 switch (combo_index)
+	 {
+	 case 0:
+		 combo_index = 1;
+		 PlayAnimMontage(ca_1);
+		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("c1"));
+
+		 break;
+	 case 1:
+		 combo_index = 2;
+		 PlayAnimMontage(ca_2);
+		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("c2"));
+
+		 break;
+	 case 2:
+		 combo_index = 0;
+		 PlayAnimMontage(ca_3);
+		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("c3"));
+
+		 break;
+	 case 3:
+		 
+
+		 break;
+	 default:
+		 break;
+	 }
+	 }
+ }
+ void Aarrow_zCharacter::reset_combo()
+ {
+	 combo_index = 0;
+	 is_attacking = false;
+	 save_attack = false;
+ }
+
+ void Aarrow_zCharacter::HeavyAttack()
+ {
+ }
+ void Aarrow_zCharacter::SpecialAttack()
+ {
+ }
+ //-----------------------------------------------------------------------------------------
  void Aarrow_zCharacter::switch_weapon()
  {
 	 // Get the skeletal mesh component
