@@ -75,6 +75,19 @@ void Acp_enemy::follow_player()
 		{
 			Direction.Normalize();
 			AddMovementInput(Direction, 1.0f);
+
+			// Set enemy rotation to face the player
+			FRotator NewRotation = Direction.Rotation();
+			NewRotation.Pitch = 0.0f; // Keep pitch level to avoid tilting up or down
+			NewRotation.Roll = 0.0f;  // Keep roll level to avoid tilting sideways
+			SetActorRotation(NewRotation);
+
+		}
+		else
+		{
+			// Stop the enemy from moving towards the player
+			//AddMovementInput(FVector::ZeroVector, 1.0f);
+			attack();
 		}
 	}
 	/*
