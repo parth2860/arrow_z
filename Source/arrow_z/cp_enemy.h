@@ -27,14 +27,25 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	//--------------------------------------------------------------------------------------------------------------
+	//ai component
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sensing")
+	//class UPawnSensingComponent* SensingComponent;
 
-	UPROPERTY()
+	//UFUNCTION()
+	//void OnHearNoise(APawn* OtherActor, const FVector& Location, float Volume);
+
+	UFUNCTION()
+	void OnSeePawn(APawn* OtherPawn);
+
+	//--------------------------------------------------------------------------------------------------------------
+	//attack
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "enemy_c1")
 	UAnimMontage* ea_1;
 
 	UFUNCTION()
 	void follow_player();
 	void attack();
 	
-
+	
 	
 };
