@@ -900,4 +900,10 @@ bool Aarrow_zCharacter::IsAttacking()
 	 }
 
  }
+ void Aarrow_zCharacter::player_block()
+ {
+	 PlayAnimMontage(pb_1);
+	// PlayAnimMontage(pb_2);
+
+ }
 

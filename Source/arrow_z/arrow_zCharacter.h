@@ -264,6 +264,15 @@ public:
 
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		UArrowComponent* WeaponAttachPoint;
+	//-----------------------------------------------------------------------------------------
+		//block
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "block")
+		UAnimMontage* pb_1;
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "block")
+		UAnimMontage* pb_2;
+
+		UFUNCTION(BlueprintCallable, Category = "block")
+		void player_block();
 
 		
 };
