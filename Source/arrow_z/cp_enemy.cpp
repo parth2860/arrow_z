@@ -126,6 +126,11 @@ void Acp_enemy::follow_player()
 }
 void Acp_enemy::attack()
 {
-	PlayAnimMontage(ea_1);
+	//PlayAnimMontage(ea_1);
+
+	if (!GetMesh()->IsPlayingRootMotion())
+	{
+		GetMesh()->GetAnimInstance()->Montage_Play(ea_1, 1.0f);
+	}
 }
 
