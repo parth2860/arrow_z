@@ -383,7 +383,7 @@ void Aarrow_zCharacter::Sprint(const FInputActionValue& Value)
 	{
 		bIsSprinting = true;
 		GetCharacterMovement()->MaxWalkSpeed *= SprintSpeedMultiplier;
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("Started Sprinting"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("Started Sprinting"));
 	}
 }
 
@@ -393,7 +393,7 @@ void Aarrow_zCharacter::Sprint_release(const FInputActionValue& Value)
 	{
 		bIsSprinting = false;
 		GetCharacterMovement()->MaxWalkSpeed /= SprintSpeedMultiplier;
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("Stopped Sprinting"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("Stopped Sprinting"));
 	}
 }
 //--------------------------------------------------------------------------------------------------------------

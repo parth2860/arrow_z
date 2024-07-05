@@ -25,7 +25,25 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	//--------------------------------------------------------------------------------------------------------------
+	//basic
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "enemy weapon")
+	UStaticMeshComponent* enemy_weapon_mesh;
 
+	// Health properties
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float MaxHealth;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	float CurrentHealth;
+
+	// Damage function
+	UFUNCTION(BlueprintCallable, Category = "enemy_damage")
+	void enemy_takeDamage(float DamageAmount);
+	//death animation
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "enemy_damage")
+	UAnimMontage* ed_1;
+	void enemy_death();
 	//--------------------------------------------------------------------------------------------------------------
 	//ai component
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sensing")

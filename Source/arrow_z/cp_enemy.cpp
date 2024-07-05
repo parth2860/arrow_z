@@ -19,7 +19,18 @@ Acp_enemy::Acp_enemy()
 	//SensingComponent->OnHearNoise.AddDynamic(this, &AYourCharacter::OnHearNoise);
 	//SensingComponent->OnSeePawn.AddDynamic(this, &AYourCharacter::OnSeePawn);
 	//--------------------------------------------------------------------------------------------------------------
+	enemy_weapon_mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("enemy_Weapon_mesh"));
+	//Weapon_mesh->SetupAttachment(GetMesh(), TEXT("enemy_weapon"));
+	enemy_weapon_mesh->SetupAttachment(RootComponent);
+	
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("StaticMesh'/Game/assets/3d_mesh/Sword.Sword'"));//D:/Users/PARTH/Documents/Unreal Projects/c++/arrow_z/Content/assets/3d_mesh/Sword.uasset
+	if (MeshAsset.Succeeded())
+	{
+		enemy_weapon_mesh->SetStaticMesh(MeshAsset.Object);
+	}
 
+	MaxHealth = 100.0f;
+	CurrentHealth = MaxHealth;
 }
 
 // Called when the game starts or when spawned
@@ -61,6 +72,21 @@ void Acp_enemy::OnSeePawn(APawn* OtherPawn)
 	}
 
 }
+//--------------------------------------------------------------------------------------------------------------
+void Acp_enemy::enemy_takeDamage(float DamageAmount)
+{
+	CurrentHealth -= DamageAmount;
+	if (CurrentHealth <= 0)
+	{
+		enemy_death();
+	}
+
+}
+void Acp_enemy::enemy_death()
+{
+	PlayAnimMontage(ed_1);
+}
+
 void Acp_enemy::follow_player()
 {
 	Aarrow_zCharacter* player = Cast<Aarrow_zCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));//targrt player
