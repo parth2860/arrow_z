@@ -19,7 +19,7 @@
 #include "cp_mesh.h"//to get access to cp_mesh
 #include "Components/ArrowComponent.h" 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-
+#include "cp_enemy.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -276,6 +276,10 @@ void Aarrow_zCharacter::note_begin(FName NotifyName, const FBranchingPointNotify
 	//--------------------------------------------------------------------------------------------------------------
 	
 }
+void Aarrow_zCharacter::note_end(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_end"));
+}
 void Aarrow_zCharacter::trace_hit()
 {
 	
@@ -338,6 +342,11 @@ void Aarrow_zCharacter::trace_hit()
 						DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, ECC_WorldStatic, 1.0f);
 						//DrawDebugLine(GetWorld(), StartTraceLocation, EndTraceLocation, FColor::Red, false, 5.0f, 0, 1.0f);
 
+						AActor* HitActor = HitResult.GetActor();
+						//Acp_enemy* enemy = Cast<Acp_enemy>(HitResult.GetActor());
+						Acp_enemy* enemy = Cast<Acp_enemy>(HitActor);
+						UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), enemy);
+						//enemy->enemy_takeDamage(90.0f);
 					}
 					else
 					{
@@ -367,13 +376,6 @@ void Aarrow_zCharacter::trace_hit()
 	}
 
 }
-
-void Aarrow_zCharacter::note_end(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("notify_end"));
-}
-//
-
 
 //--------------------------------------------------------------------------------------------------------------
 void Aarrow_zCharacter::Sprint(const FInputActionValue& Value)
@@ -537,184 +539,17 @@ void Aarrow_zCharacter::Interact_action(const FInputActionValue& Value)
 	//teleport at end location
 	//SetActorLocation(EndLocation);
 }
-//--------------------------------------------------------------------------------------------------------------
-//combo_0
-void Aarrow_zCharacter::Combat(const FInputActionValue& Value)
-{
-	// Increment the number of clicks
-	NumClicks++;
 
-	// Reset the number of clicks after a delay
-	FTimerHandle ClickTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(ClickTimerHandle, this, &Aarrow_zCharacter::ResetNumClicks, 0.5f, false);
-
-	// Play the appropriate combo attack based on the number of clicks
-	PlayComboAttack();
-}
-
-void Aarrow_zCharacter::ResetNumClicks()
-{
-	NumClicks = 0;
-}
-
-void Aarrow_zCharacter::PlayComboAttack()
-{
-	if (ComboAttackMontages.Num() == 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No combo attack montages to play."));
-		return;
-	}
-
-	MyAnimInstance = GetMesh()->GetAnimInstance();
-	if (!MyAnimInstance)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to get animation instance."));
-		return;
-	}
-
-	// Bind OnMontageEnded event
-	MyAnimInstance->OnMontageEnded.RemoveDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
-	MyAnimInstance->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::OnMontageEnded);
-
-	// Determine the number of animations to play based on the number of clicks
-	int32 NumAnimationsToPlay = FMath::Clamp(NumClicks, 0, ComboAttackMontages.Num());
-
-	// Play the combo attack animations
-	for (int32 Index = 0; Index < NumAnimationsToPlay; ++Index)
-	{
-		if (ComboAttackMontages.IsValidIndex(Index))
-		{
-			MyAnimInstance->Montage_Play(ComboAttackMontages[Index]);
-		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("Invalid montage index."));
-		}
-	}
-}
- 
-void Aarrow_zCharacter::OnMontageEnded(UAnimMontage* Montage, bool bInterrupted)
-{
-	// Perform any necessary actions after the combo attack animations have ended
-	// For example, resetting the combo state, allowing for new combos, etc.
-}
-
-
-
-//--------------------------------------------------------------------------------------------------------------
-//combo_1//doesnt work
- void Aarrow_zCharacter::combat()
-{
-	 //combo_count = 0;
-	 PlayAnimMontage(slot1);
-	 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("combo play"));
-
-	 // Bind the function to the OnMontageEnded event
-	 GetMesh()->GetAnimInstance()->OnMontageEnded.AddDynamic(this, &Aarrow_zCharacter::combat_switcher);
-}
- void Aarrow_zCharacter::combat_handle()
- {
-	 switch(combo_count)
-	 { 
-	 case 1:
-		 PlayAnimMontage(slot2);
-		 break;
-	 case 2:
-		 PlayAnimMontage(slot3);
-		 combat_reset();//reset combo ,infinite combo ,use notify end,begin
-		 break;
-	 //default:
-		 //break;
-	 }
-	 
- }
- void Aarrow_zCharacter::combat_switcher(UAnimMontage* Montage, bool bInterrupted)
- {
-	 combo_count++;
-	 combat_handle();
-
-	 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("combo switch"));
- }
- void Aarrow_zCharacter::combat_reset()
- {
-	 combo_count = 0;
- }
-//--------------------------------------------------------------------------------------------------------------
-
-/* combo_2
-void Aarrow_zCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload)
-{// Decrement Combo Index
-	m_iComboAttackIndex--;
-	// Stop Montage if below zero
-	if (m_iComboAttackIndex < 0)
-	{
-		// Get Anim Instance
-		UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
-		if (pAnimInst != nullptr)
-		{
-			pAnimInst->Montage_Stop(0.4f, m_pLight_AttackMontage);
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("play begin"));
-
-		}
-	}
-}
-void Aarrow_zCharacter::LightAttack()
-{
-	//combo2 
-	// Bind Anim Events
-	UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
-	if (pAnimInst != nullptr)
-	{
-		pAnimInst->OnPlayMontageNotifyBegin.AddDynamic(this, &Aarrow_zCharacter::HandleOnMontageNotifyBegin);
-	}
-	//
-
-	// Need to not already be attacking and must be on the ground
-    //if (!IsAttacking() && CanJump())
-	if (!IsAttacking())
-	{
-		// Get the animation instance
-		//UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
-		if (pAnimInst != nullptr)
-		{
-			// Play Light Attack
-			if (m_pLight_AttackMontage != nullptr)
-			{
-				pAnimInst->Montage_Play(m_pLight_AttackMontage);
-
-				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("light attack"));
-			}
-		}
-	}
-	else
-	{
-		m_iComboAttackIndex = 1;
-	}
-
-
-}
-bool Aarrow_zCharacter::IsAttacking()
-{
-	// Return true if any attack montage is playing
-	UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
-	if (pAnimInst != nullptr)
-	{
-		if (pAnimInst->Montage_IsPlaying(m_pLight_AttackMontage))
-		{
-			return true;
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("is attacking"));
-		
-		}
-	}
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("not attacking"));
-	return false;
-}*/
 //-----------------------------------------------------------------------------------------
  //combo_3
+void Aarrow_zCharacter::Combat(const FInputActionValue& Value)
+{
+	LightAttack();
+}
  void Aarrow_zCharacter::LightAttack()
  {
 	// PlayAnimMontage(ca_1);
-	 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("new combo play"));
+	// GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("new combo play"));
 
 	 if (is_attacking == true)
 	 {
@@ -743,19 +578,19 @@ bool Aarrow_zCharacter::IsAttacking()
 	 case 0:
 		 combo_index = 1;
 		 PlayAnimMontage(ca_1);
-		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("c1"));
+		 //GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("c1"));
 
 		 break;
 	 case 1:
 		 combo_index = 2;
 		 PlayAnimMontage(ca_2);
-		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("c2"));
+		 //GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("c2"));
 
 		 break;
 	 case 2:
 		 combo_index = 0;
 		 PlayAnimMontage(ca_3);
-		 GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("c3"));
+		// GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("c3"));
 
 		 break;
 	 case 3:
